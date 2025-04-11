@@ -1,4 +1,6 @@
-﻿namespace ClubeDoLivro.ConsoleApp
+﻿using ClubeDoLivro.ConsoleApp.ModuloAmigo;
+
+namespace ClubeDoLivro.ConsoleApp
 {
     internal class Program
     {
@@ -9,9 +11,7 @@
             telaAmigo.InserirAmigo();
             //telaAmigo.EditarAmigo();
             //telaAmigo.ExcluirAmigo();
-            telaAmigo.VisualizarAmigos();
-
-            Console.ReadKey();
+            telaAmigo.VisualizarAmigos();       
         }
     }
 }
