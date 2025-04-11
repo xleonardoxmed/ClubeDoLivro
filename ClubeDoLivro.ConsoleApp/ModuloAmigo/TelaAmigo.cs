@@ -133,15 +133,19 @@ namespace ClubeDoLivro.ConsoleApp.ModuloAmigo
 
             VisualizarAmigos();
 
+            if (contadorAmigos == 0) return;
+
             Console.WriteLine("\nDigite o ID do Amigo que deseja EXCLUIR");
             int idSelecionado = Convert.ToInt32(Console.ReadLine()!);
 
             int indice = Array.FindIndex(AmigosCadastrados, 0, contadorAmigos, a => a?.Id == idSelecionado);
-            //percorre o array até encontrar o id, do início até o fim, checando se é vazio ou é o ID. Guarda a posição ou -1 caso não ecnontre-a
+            //percorre o array até encontrar o id, do início até o fim, checando se é vazio ou é o ID.
+            //Guarda a posição ou -1 caso não ecnontre-a.
 
             if (indice == -1)
             {
                 Console.WriteLine("                    Amigo não encontrado...");
+                Thread.Sleep(1000);
                 return;
             }
 
@@ -197,7 +201,7 @@ namespace ClubeDoLivro.ConsoleApp.ModuloAmigo
             Thread.Sleep(500);
         }
 
-        internal void EmprestimosAmigos()
+        public void EmprestimosAmigos()
         {
             throw new NotImplementedException();
         }
