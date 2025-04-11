@@ -22,7 +22,7 @@ namespace ClubeDoLivro.ConsoleApp
 
                     case '4': telaAmigo.VisualizarAmigos(); break;
                    
-                    case '5': telaAmigo.EmprestimosAmigos(); break;
+                    case '5': telaAmigo.VisualizarEmprestimos(); break;
 
                     default: break;
                 }         

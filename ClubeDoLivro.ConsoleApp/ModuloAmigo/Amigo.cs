@@ -5,7 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ClubeDoLivro.ConsoleApp.ModuloAmigo
-{
+{   
+    //Validar( ), ObterEmprestimos( )
     public class Amigo
     {       
         public string NomeCompleto;
@@ -20,7 +21,7 @@ namespace ClubeDoLivro.ConsoleApp.ModuloAmigo
             Telefone = telefone;
         }
         
-        /*public string ObterIdAmigo()
+        /*public string ObterEmpréstimos()
         {
             string identificador = NomeCompleto.Substring(0, 3).ToUpper();
             return $"{identificador}: {}";
