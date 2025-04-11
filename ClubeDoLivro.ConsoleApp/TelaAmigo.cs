@@ -73,7 +73,6 @@ namespace ClubeDoLivro.ConsoleApp
 
             Console.WriteLine("{0, -30} | {1, -30} | {2, -15}",
                "Nome Completo","Nome do Responsável","Telefone"
-
            );
 
             for (int i = 0; i < AmigosCadastrados.Length; i++)
