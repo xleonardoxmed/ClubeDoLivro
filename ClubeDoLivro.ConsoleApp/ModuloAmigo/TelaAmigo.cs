@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,10 +9,7 @@ namespace ClubeDoLivro.ConsoleApp.ModuloAmigo
 {
     /* Módulo de Amigos
     Requisitos Funcionais
-    ● O sistema deve permitir a inserção de novos amigos
-    ● O sistema deve permitir a edição de amigos já cadastrados
     ● O sistema deve permitir excluir amigos já cadastrados
-    ● O sistema deve permitir visualizar amigos cadastrados
     ● O sistema deve permitir visualizar os empréstimos do amigo.
     Regras de Negócio:
     ● Campos obrigatórios:
@@ -26,25 +24,42 @@ namespace ClubeDoLivro.ConsoleApp.ModuloAmigo
         public Amigo[] AmigosCadastrados = new Amigo[100];
         public int contadorAmigos;
 
-        public void ExibirTitulo()
+        public char ExibirTitulo(bool opcoes)
         {
+            Console.Clear();
             Console.WriteLine("--------------------------------------------------------------------------------");
             Console.WriteLine("                               CLUBE DO LIVRO");
             Console.WriteLine("--------------------------------------------------------------------------------");
+
+            if (opcoes)
+            {
+                Console.WriteLine("                             Selecione a Opção desejada");
+                Console.WriteLine("--------------------------------------------------------------------------------");
+                Console.WriteLine("                              1 - Cadastrar Amigos");
+                Console.WriteLine("                              2 - Editar Amigos");
+                Console.WriteLine("                              3 - Excluir Amigos");
+                Console.WriteLine("                              4 - Visualizar Amigos");
+                Console.WriteLine("--------------------------------------------------------------------------------");
+                char opcaoEscolhida = Convert.ToChar(Console.ReadLine()![0]);
+                return opcaoEscolhida;
+            }
+            else return 'S';
+                
         }
         public void InserirAmigo()
         {
-            ExibirTitulo();
+            Console.Clear();
+            ExibirTitulo(false);
             Console.WriteLine("                             CADASTRO DE AMIGO");
             Console.WriteLine("--------------------------------------------------------------------------------");
 
-            Console.WriteLine("\n                    Insira o NOME COMPLETO do amigo: ");
+            Console.WriteLine("\nInsira o NOME COMPLETO do amigo: ");
             string nomeCompleto = Convert.ToString(Console.ReadLine()!);
 
-            Console.WriteLine($"\n                   Insira o NOME DO RESPONSÁVEL de {nomeCompleto}: ");
+            Console.WriteLine($"\nInsira o NOME DO RESPONSÁVEL de {nomeCompleto}: ");
             string nomeResponsavel = Convert.ToString(Console.ReadLine()!);
 
-            Console.WriteLine($"\n                   Insira o NÚMERO DE TELEFONE de {nomeCompleto}");
+            Console.WriteLine($"\nInsira o NÚMERO DE TELEFONE de {nomeCompleto}");
             string telefone = Console.ReadLine()!;
 
             Amigo novoAmigo = new Amigo(nomeCompleto, nomeResponsavel, telefone);
@@ -53,29 +68,29 @@ namespace ClubeDoLivro.ConsoleApp.ModuloAmigo
 
             VisualizarAmigos();
             Console.WriteLine("                       Amigo adicionado com sucesso!");
-            Thread.Sleep(3000);
+            Thread.Sleep(1000);
         }
 
 
         public void EditarAmigo()
         {
             Console.Clear();
-            ExibirTitulo();
+            ExibirTitulo(false);
             Console.WriteLine("                             EDIÇÃO DE AMIGO");
             Console.WriteLine("--------------------------------------------------------------------------------");
 
             VisualizarAmigos();
 
-            Console.WriteLine("                   Digite o ID do Amigo que deseja EDITAR");
+            Console.WriteLine("\nDigite o ID do Amigo que deseja EDITAR");
             int idSelecionado = Convert.ToInt32(Console.ReadLine()!);
 
-            Console.WriteLine("\n                     Insira o NOME COMPLETO do amigo: ");
+            Console.WriteLine("\nInsira o NOME COMPLETO do amigo: ");
             string nomeCompleto = Convert.ToString(Console.ReadLine()!);
 
-            Console.WriteLine($"\n                    Insira o NOME DO RESPONSÁVEL de {nomeCompleto}: ");
+            Console.WriteLine($"\nInsira o NOME DO RESPONSÁVEL de {nomeCompleto}: ");
             string nomeResponsavel = Convert.ToString(Console.ReadLine()!);
 
-            Console.WriteLine($"\n                    Insira o NÚMERO DE TELEFONE de {nomeCompleto}");
+            Console.WriteLine($"\nInsira o NÚMERO DE TELEFONE de {nomeCompleto}");
             string telefone = Console.ReadLine()!;
 
             Amigo amigoEditado = new Amigo(nomeCompleto, nomeResponsavel, telefone);
@@ -102,7 +117,8 @@ namespace ClubeDoLivro.ConsoleApp.ModuloAmigo
 
             Console.WriteLine();
             Console.WriteLine("                       Amigo editado com sucesso!");
-            Thread.Sleep(3000);
+            Thread.Sleep(1000);
+            VisualizarAmigos();
 
         }
 
@@ -114,7 +130,7 @@ namespace ClubeDoLivro.ConsoleApp.ModuloAmigo
         public void VisualizarAmigos()
         {
             Console.Clear();
-            ExibirTitulo();
+            ExibirTitulo(false);
             Console.WriteLine("                             AMIGOS CADASTRADOS");
             Console.WriteLine("--------------------------------------------------------------------------------");
 
@@ -122,7 +138,7 @@ namespace ClubeDoLivro.ConsoleApp.ModuloAmigo
                "Id", "Nome Completo", "Nome do Responsável", "Telefone"
            );
 
-            for (int i = 0; i < AmigosCadastrados.Length; i++)
+            for (int i = 0; i < contadorAmigos; i++)
             {
                 Amigo dadosAmigo = AmigosCadastrados[i];
 
@@ -133,6 +149,9 @@ namespace ClubeDoLivro.ConsoleApp.ModuloAmigo
                 );
                 Console.WriteLine("--------------------------------------------------------------------------------");
             }
+            Console.WriteLine("\n                   Aperte qualquer tecla para continuar");
+            Console.ReadKey();
+            Thread.Sleep(500);
         }
     }
 }

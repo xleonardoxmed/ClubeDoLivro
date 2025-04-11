@@ -1,4 +1,5 @@
 ﻿using ClubeDoLivro.ConsoleApp.ModuloAmigo;
+using System.ComponentModel.Design;
 
 namespace ClubeDoLivro.ConsoleApp
 {
@@ -7,11 +8,23 @@ namespace ClubeDoLivro.ConsoleApp
         static void Main(string[] args)
         {
             TelaAmigo telaAmigo = new TelaAmigo();
-            
-            telaAmigo.InserirAmigo();
-            //telaAmigo.EditarAmigo();
-            //telaAmigo.ExcluirAmigo();
-            telaAmigo.VisualizarAmigos();       
+            while (true)
+            {
+                Char opcaoEscolhida = telaAmigo.ExibirTitulo(true);
+
+                switch (opcaoEscolhida)
+                {
+                    case '1': telaAmigo.InserirAmigo(); break;
+
+                    case '2': telaAmigo.EditarAmigo(); break;
+
+                    case '3': telaAmigo.ExcluirAmigo(); break;
+
+                    case '4': telaAmigo.VisualizarAmigos(); break;
+
+                    default: break;
+                }         
+            }
         }
     }
 }
