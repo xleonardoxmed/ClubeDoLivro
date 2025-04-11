@@ -21,6 +21,8 @@ namespace ClubeDoLivro.ConsoleApp
                     case '3': telaAmigo.ExcluirAmigo(); break;
 
                     case '4': telaAmigo.VisualizarAmigos(); break;
+                   
+                    case '5': telaAmigo.EmprestimosAmigos(); break;
 
                     default: break;
                 }         
