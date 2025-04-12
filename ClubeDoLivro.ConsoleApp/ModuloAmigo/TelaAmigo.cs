@@ -29,9 +29,7 @@ namespace ClubeDoLivro.ConsoleApp.ModuloAmigo
     */
     public class TelaAmigo
     {
-        public Amigo[] AmigosCadastrados = new Amigo[100];
-        public int contadorAmigos;
-
+        RepositorioAmigo repositorioAmigo = new RepositorioAmigo();
         public char ExibirTitulo(bool opcoes)
         {
             Console.Clear();
@@ -72,9 +70,8 @@ namespace ClubeDoLivro.ConsoleApp.ModuloAmigo
             string telefone = Console.ReadLine()!;
 
             Amigo novoAmigo = new Amigo(nomeCompleto, nomeResponsavel, telefone);
-            AmigosCadastrados[contadorAmigos++] = novoAmigo;
-            novoAmigo.Id = contadorAmigos;
-
+            repositorioAmigo.Inserir(novoAmigo);
+           
             VisualizarAmigos();
             Console.WriteLine("                       Amigo adicionado com sucesso!");
             Thread.Sleep(1000);
@@ -104,19 +101,7 @@ namespace ClubeDoLivro.ConsoleApp.ModuloAmigo
 
             Amigo amigoEditado = new Amigo(nomeCompleto, nomeResponsavel, telefone);
 
-            bool conseguiuEditar = false;
-
-            for (int i = 0; i < contadorAmigos; i++)
-            {
-                if (AmigosCadastrados[i] == null) continue;
-                else if (AmigosCadastrados[i].Id == idSelecionado)
-                {
-                    AmigosCadastrados[i].NomeCompleto = amigoEditado.NomeCompleto;
-                    AmigosCadastrados[i].NomeResponsavel = amigoEditado.NomeResponsavel;
-                    AmigosCadastrados[i].Telefone = amigoEditado.Telefone;
-                    conseguiuEditar = true;
-                }
-            }
+            bool conseguiuEditar = repositorioAmigo.Editar(idSelecionado, amigoEditado);
 
             if (!conseguiuEditar)
             {
@@ -140,35 +125,16 @@ namespace ClubeDoLivro.ConsoleApp.ModuloAmigo
 
             VisualizarAmigos();
 
-            if (contadorAmigos == 0) return;
-
             Console.WriteLine("\nDigite o ID do Amigo que deseja EXCLUIR");
             int idSelecionado = Convert.ToInt32(Console.ReadLine()!);
 
-            int indice = Array.FindIndex(AmigosCadastrados, 0, contadorAmigos, a => a?.Id == idSelecionado);
-            //percorre o array até encontrar o id, do início até o fim, checando se é vazio ou é o ID.
-            //Guarda a posição ou -1 caso não ecnontre-a.
+            bool conseguiuExcluir = repositorioAmigo.Excluir(idSelecionado);
 
-            if (indice == -1)
-            {
-                Console.WriteLine("                    Amigo não encontrado...");
-                Thread.Sleep(1000);
-                return;
-            }
-
-            for (int i = indice; i < contadorAmigos - 1; i++)
-                AmigosCadastrados[i] = AmigosCadastrados[i + 1];
-            //puxa todos para trás, preenchendo os buracos
-
-            AmigosCadastrados[--contadorAmigos] = null!;
-            //remove o último item duplicado
-
-            for (int i = 0; i < contadorAmigos; i++)
-                AmigosCadastrados[i].Id = i + 1;
-            //atualiza os IDs
+            if (!conseguiuExcluir) { Console.WriteLine("\n                 Amigo não encontrado ou não pôde ser excluído."); }
+            else { Console.WriteLine("                       Cadastro excluído com sucesso!"); }
 
             Console.WriteLine();
-            Console.WriteLine("                       Cadastro excluído com sucesso!");
+
             Thread.Sleep(1000);
             VisualizarAmigos();
         }
@@ -180,29 +146,29 @@ namespace ClubeDoLivro.ConsoleApp.ModuloAmigo
             Console.WriteLine("                             AMIGOS CADASTRADOS");
             Console.WriteLine("--------------------------------------------------------------------------------");
 
-            if (contadorAmigos == 0)
-            {
-                Console.WriteLine("\n                         Nenhum amigo cadastrado");
-                Console.WriteLine("\n                   Aperte qualquer tecla para continuar");
-                Console.ReadKey();
-                return;
-            }
+            Amigo[] amigosCadastrados = repositorioAmigo.SelecionarTodos();
+
+            bool temCadastros = false;
 
             Console.WriteLine("{0,-3} | {1,-30} | {2,-30} | {3,-15}",
                "Id", "Nome Completo", "Nome do Responsável", "Telefone"
            );
 
-            for (int i = 0; i < contadorAmigos; i++)
+            for (int i = 0; i < amigosCadastrados.Length; i++)
             {
-                Amigo dadosAmigo = AmigosCadastrados[i];
+                Amigo dadosAmigo = amigosCadastrados[i];
 
                 if (dadosAmigo == null) continue;
+                temCadastros = true;
 
                 Console.WriteLine("{0,-3} | {1,-30} | {2,-30} | {3,-15}",
                  dadosAmigo.Id, dadosAmigo.NomeCompleto, dadosAmigo.NomeResponsavel, dadosAmigo.Telefone
                 );
                 Console.WriteLine("--------------------------------------------------------------------------------");
             }
+
+            if (!temCadastros) { Console.WriteLine("\n                         Nenhum amigo cadastrado"); }
+
             Console.WriteLine("\n                   Aperte qualquer tecla para continuar");
             Console.ReadKey();
             Thread.Sleep(500);
@@ -212,6 +178,8 @@ namespace ClubeDoLivro.ConsoleApp.ModuloAmigo
         {
             throw new NotImplementedException();
         }
+
+
     }
 }
 
