@@ -32,39 +32,51 @@ namespace ClubeDoLivro.ConsoleApp
         }
         public void GerenciarAmigos()
         {
-            Char opcaoEscolhida = telaAmigo.ExibirTitulo(true);
-
-            switch (opcaoEscolhida)
+            bool loop = true;
+            while (loop)
             {
-                case '1': telaAmigo.InserirAmigo(); break;
+                Char opcaoEscolhida = telaAmigo.ExibirTitulo(true);
 
-                case '2': telaAmigo.EditarAmigo(); break;
+                switch (opcaoEscolhida)
+                {
+                    case '1': telaAmigo.InserirAmigo(); break;
 
-                case '3': telaAmigo.ExcluirAmigo(); break;
+                    case '2': telaAmigo.EditarAmigo(); break;
 
-                case '4': telaAmigo.VisualizarAmigos(); break;
+                    case '3': telaAmigo.ExcluirAmigo(); break;
 
-                case '5': telaAmigo.VisualizarEmprestimos(); break;
+                    case '4': telaAmigo.VisualizarAmigos(); break;
 
-                default: break;
+                    case '5': telaAmigo.VisualizarEmprestimos(); break;
+
+                    case '6': loop = false; break;
+
+                    default: break;
+                }
             }
         }
 
-        internal void GerenciarCaixas()
+        public void GerenciarCaixas()
         {
-            Char opcaoEscolhida = telaCaixa.ExibirTitulo(true);
-
-            switch (opcaoEscolhida)
+            bool loop = true;
+            while (loop)
             {
-                case '1': telaCaixa.InserirCaixa(); break;
+                Char opcaoEscolhida = telaCaixa.ExibirTitulo(true);
 
-                case '2': telaCaixa.EditarCaixa(); break;
+                switch (opcaoEscolhida)
+                {
+                    case '1': telaCaixa.InserirCaixa(); break;
 
-                case '3': telaCaixa.ExcluirCaixa(); break;
+                    case '2': telaCaixa.EditarCaixa(); break;
 
-                case '4': telaCaixa.VisualizarCaixas(); break;
+                    case '3': telaCaixa.ExcluirCaixa(); break;
 
-                default: break;
+                    case '4': telaCaixa.VisualizarCaixas(); break;
+                    
+                    case '5': loop = false; break;
+
+                    default: break;
+                }
             }
         }
 

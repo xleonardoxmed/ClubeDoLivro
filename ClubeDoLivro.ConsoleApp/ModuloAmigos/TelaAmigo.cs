@@ -46,6 +46,7 @@ namespace ClubeDoLivro.ConsoleApp.ModuloAmigo
                 Console.WriteLine("                              3 - Excluir Amigos");
                 Console.WriteLine("                              4 - Visualizar Amigos");
                 Console.WriteLine("                              5 - Visualizar Empréstimos de Amigos");
+                Console.WriteLine("                              6 - Voltar ao Menu");
                 Console.WriteLine("--------------------------------------------------------------------------------");
                 char opcaoEscolhida = Convert.ToChar(Console.ReadLine()![0]);
                 return opcaoEscolhida;
