@@ -1,4 +1,5 @@
 ﻿using ClubeDoLivro.ConsoleApp.ModuloAmigo;
+using ClubeDoLivro.ConsoleApp.ModuloCaixas;
 using ClubeDoLivro.ConsoleApp.ModuloRevistas;
 using System.ComponentModel.Design;
 
@@ -8,9 +9,15 @@ namespace ClubeDoLivro.ConsoleApp.Principal
     {
         static void Main(string[] args)
         {
+            RepositorioAmigo repositorioAmigo = new RepositorioAmigo();
+            RepositorioCaixa repositorioCaixa = new RepositorioCaixa();
+            RepositorioRevista repositorioRevista = new RepositorioRevista();
+
             TelaPrincipal telaPrincipal = new TelaPrincipal();
             TelaAmigo telaAmigo = new TelaAmigo();
+            TelaCaixa telaCaixa = new TelaCaixa();
             TelaRevista telaRevista = new TelaRevista();
+
             bool programa = true;
 
             while (programa)

@@ -27,9 +27,9 @@ namespace ClubeDoLivro.ConsoleApp.ModuloRevistas
             {
                 if (RevistasCadastradas[i] != null && RevistasCadastradas[i].Id == id)
                 {
-                    RevistasCadastradas[i].Titulo = revistaEditada.Titulo;
                     RevistasCadastradas[i].Edicao = revistaEditada.Edicao;
                     RevistasCadastradas[i].AnoPublicacao = revistaEditada.AnoPublicacao;
+                    RevistasCadastradas[i].Titulo = revistaEditada.Titulo;
                     RevistasCadastradas[i].StatusEmprestimo = revistaEditada.StatusEmprestimo;
                     RevistasCadastradas[i].Caixa = revistaEditada.Caixa;
                     return true;

@@ -10,7 +10,15 @@ namespace ClubeDoLivro.ConsoleApp.ModuloRevistas
 {
     public class TelaRevista
     {
-        RepositorioRevista repositorioRevista = new RepositorioRevista();
+        public RepositorioRevista repositorioRevista;
+        public RepositorioCaixa repositorioCaixa;
+
+        public TelaRevista(RepositorioRevista repositorioRevista, RepositorioCaixa repositorioCaixa)
+        {
+            this.repositorioRevista = repositorioRevista;
+            this.repositorioCaixa = repositorioCaixa;
+        }
+
         public char ExibirTitulo(bool opcoes)
         {
             Console.Clear();
@@ -41,6 +49,9 @@ namespace ClubeDoLivro.ConsoleApp.ModuloRevistas
             ExibirTitulo(false);
             Console.WriteLine("                             CADASTRO DE REVISTA");
             Console.WriteLine("--------------------------------------------------------------------------------");
+
+            //repositorioCaixa
+
 
             Console.WriteLine("\nInsira o TITULO (nome) da revista: ");
             string titulo = Convert.ToString(Console.ReadLine()!);

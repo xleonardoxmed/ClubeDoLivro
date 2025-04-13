@@ -26,9 +26,10 @@ namespace ClubeDoLivro.ConsoleApp.ModuloRevistas
             Caixa = null!;
         }
 
-        public void ColocarNaCaixa()
+        public void ColocarNaCaixa(Caixa caixa)
         {
-
+            Caixa = caixa.Etiqueta;
+            StatusEmprestimo = "Emprestada";
         }
 
         public void Validar()
