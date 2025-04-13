@@ -12,6 +12,7 @@ namespace ClubeDoLivro.ConsoleApp.ModuloCaixas
         public string Cor;
         public int DiasEmprestimo;
         public int Id;
+        public List<string> Revistas = new();
 
         public Caixa(string etiqueta, string cor, int diasEmprestimo)
         {
@@ -27,19 +28,22 @@ namespace ClubeDoLivro.ConsoleApp.ModuloCaixas
 
         }
 
-        public void Validar()
+        public bool Validar()
         {
-
+            if (string.IsNullOrWhiteSpace(Etiqueta)) return false;
+            if (string.IsNullOrWhiteSpace(Cor)) return false;
+            if (DiasEmprestimo <= 0) return false;
+            return true;
         }
 
-        public void AdicionarRevista()
+        public void AdicionarRevista(string titulo)
         {
-
+            Revistas.Add(titulo);
         }
 
-        public void RemoverRevista()
+        public void RemoverRevista(string titulo)
         {
-
+            Revistas.Remove(titulo);
         }
     }
 }
