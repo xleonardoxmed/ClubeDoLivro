@@ -1,12 +1,14 @@
 ﻿using ClubeDoLivro.ConsoleApp.ModuloAmigo;
 using ClubeDoLivro.ConsoleApp.ModuloCaixas;
+using ClubeDoLivro.ConsoleApp.ModuloRevistas;
 
-namespace ClubeDoLivro.ConsoleApp
+namespace ClubeDoLivro.ConsoleApp.Principal
 {
     public class TelaPrincipal
     {
         TelaAmigo telaAmigo = new TelaAmigo();
         TelaCaixa telaCaixa = new TelaCaixa();
+        TelaRevista telaRevista = new TelaRevista();
         public char ExibirTitulo(bool opcaoPrincipal)
         {
             Console.Clear();
@@ -23,6 +25,7 @@ namespace ClubeDoLivro.ConsoleApp
                 Console.WriteLine("                              3 - Gerenciar Revistas");
                 Console.WriteLine("                              4 - Visualizar Lista Negra");
                 Console.WriteLine("                              5 - Visualizar Empréstimos");
+                Console.WriteLine("                              6 - Sair do Programa");
                 Console.WriteLine("--------------------------------------------------------------------------------");
                 char opcaoEscolhida = Convert.ToChar(Console.ReadLine()![0]);
                 return opcaoEscolhida;
@@ -61,7 +64,7 @@ namespace ClubeDoLivro.ConsoleApp
             bool loop = true;
             while (loop)
             {
-                Char opcaoEscolhida = telaCaixa.ExibirTitulo(true);
+                char opcaoEscolhida = telaCaixa.ExibirTitulo(true);
 
                 switch (opcaoEscolhida)
                 {
@@ -72,7 +75,7 @@ namespace ClubeDoLivro.ConsoleApp
                     case '3': telaCaixa.ExcluirCaixa(); break;
 
                     case '4': telaCaixa.VisualizarCaixas(); break;
-                    
+
                     case '5': loop = false; break;
 
                     default: break;
@@ -80,9 +83,30 @@ namespace ClubeDoLivro.ConsoleApp
             }
         }
 
-        internal void GerenciarRevistas()
+        public void GerenciarRevistas()
         {
-            throw new NotImplementedException();
+            bool loop = true;
+            while (loop)
+            {
+                char opcaoEscolhida = telaRevista.ExibirTitulo(true);
+
+                switch (opcaoEscolhida)
+                {
+                    case '1': telaRevista.InserirRevista(); break;
+
+                    case '2': telaRevista.EditarRevista(); break;
+
+                    case '3': telaRevista.ExcluirRevista(); break;
+
+                    case '4': telaRevista.VisualizarRevistas(); break;
+
+                    case '5': telaCaixa.VisualizarCaixas(); break;
+
+                    case '6': loop = false; break;
+
+                    default: break;
+                }
+            }
         }
 
         internal void VisualizarEmprestimos()

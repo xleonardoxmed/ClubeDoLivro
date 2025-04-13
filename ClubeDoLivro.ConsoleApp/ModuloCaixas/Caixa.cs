@@ -25,7 +25,6 @@ namespace ClubeDoLivro.ConsoleApp.ModuloCaixas
             Console.ForegroundColor = colorir;
             Console.WriteLine(Cor);
             Console.ResetColor();
-
         }
 
         public bool Validar()

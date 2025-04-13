@@ -1,7 +1,8 @@
 ﻿using ClubeDoLivro.ConsoleApp.ModuloAmigo;
+using ClubeDoLivro.ConsoleApp.ModuloRevistas;
 using System.ComponentModel.Design;
 
-namespace ClubeDoLivro.ConsoleApp
+namespace ClubeDoLivro.ConsoleApp.Principal
 {
     internal class Program
     {
@@ -9,9 +10,12 @@ namespace ClubeDoLivro.ConsoleApp
         {
             TelaPrincipal telaPrincipal = new TelaPrincipal();
             TelaAmigo telaAmigo = new TelaAmigo();
-            while (true)
+            TelaRevista telaRevista = new TelaRevista();
+            bool programa = true;
+
+            while (programa)
             {
-                Char opcaoPrincipal = telaPrincipal.ExibirTitulo(true);
+                char opcaoPrincipal = telaPrincipal.ExibirTitulo(true);
 
                 switch (opcaoPrincipal)
                 {
@@ -24,6 +28,8 @@ namespace ClubeDoLivro.ConsoleApp
                     case '4': telaPrincipal.VisualizarListaNegra(); break;
 
                     case '5': telaPrincipal.VisualizarEmprestimos(); break;
+
+                    case '6': programa = false ; break;
 
                     default: break;
                 }
