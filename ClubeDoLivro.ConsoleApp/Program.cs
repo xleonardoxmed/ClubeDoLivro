@@ -7,25 +7,27 @@ namespace ClubeDoLivro.ConsoleApp
     {
         static void Main(string[] args)
         {
+            TelaPrincipal telaPrincipal = new TelaPrincipal();
             TelaAmigo telaAmigo = new TelaAmigo();
             while (true)
             {
-                Char opcaoEscolhida = telaAmigo.ExibirTitulo(true);
+                Char opcaoPrincipal = telaPrincipal.ExibirTitulo(true);
 
-                switch (opcaoEscolhida)
+                switch (opcaoPrincipal)
                 {
-                    case '1': telaAmigo.InserirAmigo(); break;
+                    case '1': telaPrincipal.GerenciarAmigos(); break;
 
-                    case '2': telaAmigo.EditarAmigo(); break;
+                    case '2': telaPrincipal.GerenciarCaixas(); break;
 
-                    case '3': telaAmigo.ExcluirAmigo(); break;
+                    case '3': telaPrincipal.GerenciarRevistas(); break;
 
-                    case '4': telaAmigo.VisualizarAmigos(); break;
-                   
-                    case '5': telaAmigo.VisualizarEmprestimos(); break;
+                    case '4': telaPrincipal.VisualizarListaNegra(); break;
+
+                    case '5': telaPrincipal.VisualizarEmprestimos(); break;
 
                     default: break;
-                }         
+                }
+
             }
         }
     }
