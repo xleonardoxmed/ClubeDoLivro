@@ -116,7 +116,9 @@ namespace ClubeDoLivro.ConsoleApp.Principal
                    
                     case '6': telaRevista.ColocarNaCaixa(); break;
 
-                    case '7': loop = false; break;
+                    case '7': telaRevista.RemoverDaCaixa(); break;
+
+                    case '8': loop = false; break;
 
                     default: break;
                 }

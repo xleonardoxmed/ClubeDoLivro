@@ -13,7 +13,7 @@ namespace ClubeDoLivro.ConsoleApp.ModuloRevistas
         public RepositorioRevista repositorioRevista;
         public RepositorioCaixa repositorioCaixa;
         public TelaCaixa telaCaixa;
-       
+
         public TelaRevista(RepositorioRevista repositorioRevista, RepositorioCaixa repositorioCaixa, TelaCaixa telaCaixa)
         {
             this.repositorioRevista = repositorioRevista;
@@ -38,7 +38,8 @@ namespace ClubeDoLivro.ConsoleApp.ModuloRevistas
                 Console.WriteLine("                              4 - Visualizar Revistas");
                 Console.WriteLine("                              5 - Visualizar Caixas");
                 Console.WriteLine("                              6 - Colocar Revistas nas Caixas");
-                Console.WriteLine("                              7 - Voltar ao Menu");
+                Console.WriteLine("                              7 - Remover Revistas das Caixas");
+                Console.WriteLine("                              8 - Voltar ao Menu");
                 Console.WriteLine("--------------------------------------------------------------------------------");
                 char opcaoEscolhida = Convert.ToChar(Console.ReadLine()![0]);
                 return opcaoEscolhida;
@@ -151,28 +152,26 @@ namespace ClubeDoLivro.ConsoleApp.ModuloRevistas
                 if (dadosRevista == null) continue;
                 temCadastros = true;
 
-                
+
 
                 string tituloFormatado = dadosRevista.Titulo.Length > 40 ? dadosRevista.Titulo.Substring(0, 37) + "..." : dadosRevista.Titulo;
 
                 if (dadosRevista.Caixa != null)
                 {
-                    // Exibindo os dados da revista
                     Console.Write("{0,-3} | {1,-40} | {2,-6} | {3,-6} | {4,-12} | ",
                         dadosRevista.Id,
                         tituloFormatado,
                         dadosRevista.Edicao,
                         dadosRevista.AnoPublicacao,
-                        dadosRevista.StatusEmprestimo);
+                        dadosRevista.StatusEmprestimo
+                    );
 
-                    // Aqui pintamos apenas a etiqueta da caixa
                     Console.ForegroundColor = dadosRevista.ObterCorConsole(dadosRevista.Caixa.Cor);
-                    Console.Write(dadosRevista.Caixa.Etiqueta);  // Exibe a etiqueta da caixa com a cor
-                    Console.ResetColor();  // Resetando a cor após a etiqueta
+                    Console.Write(dadosRevista.Caixa.Etiqueta); // Pinta a caixa 
+                    Console.ResetColor();
                 }
                 else
                 {
-                    // Caso não haja caixa associada
                     Console.WriteLine("{0,-3} | {1,-40} | {2,-6} | {3,-6} | {4,-12} | {5} ",
                         dadosRevista.Id,
                         tituloFormatado,
@@ -183,7 +182,7 @@ namespace ClubeDoLivro.ConsoleApp.ModuloRevistas
                     );
                 }
             }
-       
+
             if (!temCadastros) { Console.WriteLine("\n                         Nenhuma revista cadastrada"); }
 
             Console.WriteLine("\n                   Aperte qualquer tecla para continuar");
@@ -214,6 +213,43 @@ namespace ClubeDoLivro.ConsoleApp.ModuloRevistas
             Console.WriteLine();
 
             Thread.Sleep(1000);
+            VisualizarRevistas();
+        }
+        public void RemoverDaCaixa()
+        {
+            Console.Clear();
+            ExibirTitulo(false);
+            Console.WriteLine("                             REMOVER REVISTA DE CAIXA");
+            Console.WriteLine("--------------------------------------------------------------------------------");
+
+            VisualizarRevistas();
+
+            Console.WriteLine("\nDigite o ID da Revista que deseja REMOVER de uma Caixa");
+            int idSelecionado = Convert.ToInt32(Console.ReadLine()!);
+
+            Revista revista = repositorioRevista.SelecionarPorId(idSelecionado)!;
+
+            if (revista == null)
+            {
+                Console.WriteLine("\nRevista não encontrada.");
+                return;
+            }
+
+            if (revista.Caixa == null)
+            {
+                Console.WriteLine("\nEssa revista não está associada a nenhuma caixa.");
+                return;
+            }
+
+            Console.WriteLine($"\nA revista '{revista.Titulo}' está na caixa: {revista.Caixa.Etiqueta}");
+
+            revista.Caixa.RemoverRevista(revista);
+            revista.Caixa = null;
+
+            Console.WriteLine($"\nRevista '{revista.Titulo}' removida com sucesso!");
+            Console.WriteLine();
+
+            Thread.Sleep(5000);
             VisualizarRevistas();
         }
     }

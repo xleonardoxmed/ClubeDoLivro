@@ -45,7 +45,7 @@ namespace ClubeDoLivro.ConsoleApp.ModuloRevistas
 
         public void Devolver()
         {
-
+          StatusEmprestimo = "Disponível";
         }
         public ConsoleColor ObterCorConsole(string cor)
         {
