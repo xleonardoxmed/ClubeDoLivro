@@ -21,11 +21,24 @@ namespace ClubeDoLivro.ConsoleApp.ModuloRevistas
             contadorRevistas++;
         }
 
-        public bool Editar(int id, Revista revistaEditada)
+        public bool Editar(int idSelecionado, Revista revistaEditada)
         {
+            if (contadorRevistas == 0) return false;
+
+            int indice = Array.FindIndex(RevistasCadastradas, 0, contadorRevistas, a => a?.Id == idSelecionado);
+            //percorre o array até encontrar o id, do início até o fim, checando se é vazio ou é o ID.
+            //Guarda a posição ou -1 caso não ecnontre-a.
+
+            if (indice == -1)
+            {
+                Console.WriteLine("                    Revista não encontrada...");
+                Thread.Sleep(1000);
+                return false;
+            }
+
             for (int i = 0; i < contadorRevistas; i++)
             {
-                if (RevistasCadastradas[i] != null && RevistasCadastradas[i].Id == id)
+                if (RevistasCadastradas[i] != null && RevistasCadastradas[i].Id == idSelecionado)
                 {
                     RevistasCadastradas[i].Edicao = revistaEditada.Edicao;
                     RevistasCadastradas[i].AnoPublicacao = revistaEditada.AnoPublicacao;

@@ -3,6 +3,7 @@ using ClubeDoLivro.ConsoleApp.ModuloCaixas;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -55,15 +56,38 @@ namespace ClubeDoLivro.ConsoleApp.ModuloRevistas
             Console.WriteLine("--------------------------------------------------------------------------------");
 
             Console.WriteLine("\nInsira o TITULO (nome) da revista: ");
-            string titulo = Convert.ToString(Console.ReadLine()!);
+            string titulo = Console.ReadLine()!;
 
             Console.WriteLine($"\nInsira a EDIÇÃO da revista {titulo}: ");
-            string edicao = Convert.ToString(Console.ReadLine()!);
+            string edicao = Console.ReadLine()!;
+
+            if (edicao.Contains('-') || edicao == "0")
+            {
+                Console.WriteLine("\nErro! A edição não pode ser um número menor ou igual a zero!");
+                Console.WriteLine("\nOperação Cancelada.");
+                Thread.Sleep(2000);
+                return;
+            }
 
             Console.WriteLine($"\nInsira o ANO DE PUBLICAÇÃO (nome) da revista {titulo}: ");
-            int anoPublicacao = Convert.ToInt32(Console.ReadLine()!);
+            string inputAno = Console.ReadLine()!;
+
+            if (!int.TryParse(inputAno, out int anoPublicacao))
+            {
+                Console.WriteLine("\n Erro! Ano inválido!");
+                Console.WriteLine("\nOperação Cancelada.");
+                Thread.Sleep(2000);
+                return;
+            }
 
             Revista novaRevista = new Revista(titulo, edicao, anoPublicacao, telaCaixa);
+
+            if (!novaRevista.Validar())
+            {
+                Thread.Sleep(2000);
+                return;
+            }
+
             repositorioRevista.Inserir(novaRevista);
 
             VisualizarRevistas();
@@ -80,22 +104,81 @@ namespace ClubeDoLivro.ConsoleApp.ModuloRevistas
 
             VisualizarRevistas();
 
+            bool temCadastros = false;
+
+            foreach (var revista in repositorioRevista.RevistasCadastradas)
+            {
+                if (revista != null)
+                {
+                    temCadastros = true;
+                    break;
+                }
+            }
+
+            if (!temCadastros)
+            {
+                Console.WriteLine("    \n                            Voltando ao menu");
+                Thread.Sleep(1000);
+                return;
+            }
+
             Console.WriteLine("\nDigite o ID da Revista que deseja EDITAR");
-            int idSelecionado = Convert.ToInt32(Console.ReadLine()!);
+            string inputId = Console.ReadLine()!;
+
+
+            if (!int.TryParse(inputId, out int idSelecionado))
+            {
+                Console.WriteLine("\n Erro! ID inválido!");
+                Console.WriteLine("\nOperação Cancelada.");
+                Thread.Sleep(2000);
+                return;
+            }
+            Revista revistaExistente = repositorioRevista.SelecionarPorId(idSelecionado)!;
+
+            if (revistaExistente == null)
+            {
+                Console.WriteLine("\nErro! Nenhuma revista com esse ID foi encontrada!");
+                Console.WriteLine("\nOperação Cancelada.");
+                Thread.Sleep(2000);
+                return;
+            }
 
             Console.WriteLine("\nInsira o TITULO (nome) da revista: ");
-            string titulo = Convert.ToString(Console.ReadLine()!);
+            string titulo = Console.ReadLine()!;
 
             Console.WriteLine($"\nInsira a EDIÇÃO da revista {titulo}: ");
-            string edicao = Convert.ToString(Console.ReadLine()!);
+            string edicao = Console.ReadLine()!;
+
+            if (edicao.Contains('-') || edicao == "0")
+            {
+                Console.WriteLine("\nErro! A edição não pode ser um número menor que zero!");
+                Console.WriteLine("\nOperação Cancelada.");
+                Thread.Sleep(2000);
+                return;
+            }
 
             Console.WriteLine($"\nInsira o ANO DE PUBLICAÇÃO (nome) da revista {titulo}: ");
-            int anoPublicacao = Convert.ToInt32(Console.ReadLine()!);
+            string inputAno = Console.ReadLine()!;
 
-            Revista novaRevista = new Revista(titulo, edicao, anoPublicacao, telaCaixa);
-            repositorioRevista.Editar(idSelecionado, novaRevista);
+            if (!int.TryParse(inputAno, out int anoPublicacao))
+            {
+                Console.WriteLine("\n Erro! Ano inválido!");
+                Console.WriteLine("\nOperação Cancelada.");
+                Thread.Sleep(2000);
+                return;
+            }
 
-            bool conseguiuEditar = repositorioRevista.Editar(idSelecionado, novaRevista);
+            Revista revistaEditada = new Revista(titulo, edicao, anoPublicacao, telaCaixa);
+
+            if (!revistaEditada.Validar())
+            {
+                Thread.Sleep(2000);
+                return;
+            }
+
+            repositorioRevista.Editar(idSelecionado, revistaEditada);
+
+            bool conseguiuEditar = repositorioRevista.Editar(idSelecionado, revistaEditada);
 
             if (!conseguiuEditar)
             {
@@ -116,9 +199,34 @@ namespace ClubeDoLivro.ConsoleApp.ModuloRevistas
             Console.WriteLine("--------------------------------------------------------------------------------");
 
             VisualizarRevistas();
+            bool temCadastros = false;
+
+            foreach (var revista in repositorioRevista.RevistasCadastradas)
+            {
+                if (revista != null)
+                {
+                    temCadastros = true;
+                    break;
+                }
+            }
+
+            if (!temCadastros)
+            {
+                Console.WriteLine("    \n                            Voltando ao menu");
+                Thread.Sleep(1000);
+                return;
+            }
 
             Console.WriteLine("\nDigite o ID da Revista que deseja EXCLUIR");
-            int idSelecionado = Convert.ToInt32(Console.ReadLine()!);
+            string inputId = Console.ReadLine()!;
+
+            if (!int.TryParse(inputId, out int idSelecionado))
+            {
+                Console.WriteLine("\n Erro! ID inválido!");
+                Console.WriteLine("\nOperação Cancelada.");
+                Thread.Sleep(2000);
+                return;
+            }
 
             bool conseguiuExcluir = repositorioRevista.Excluir(idSelecionado);
 
@@ -151,8 +259,6 @@ namespace ClubeDoLivro.ConsoleApp.ModuloRevistas
 
                 if (dadosRevista == null) continue;
                 temCadastros = true;
-
-
 
                 string tituloFormatado = dadosRevista.Titulo.Length > 40 ? dadosRevista.Titulo.Substring(0, 37) + "..." : dadosRevista.Titulo;
 

@@ -30,22 +30,37 @@ namespace ClubeDoLivro.ConsoleApp.ModuloRevistas
 
         public void AtualizarCaixa(Caixa caixa, Revista revista)
         {
-            Caixa = caixa;           
+            Caixa = caixa;
         }
 
-        public void Validar()
+        public bool Validar()
         {
+            bool temErro = false;
 
+            if (string.IsNullOrWhiteSpace(Titulo)) { Console.WriteLine("→ Campo 'Título' é obrigatório."); temErro = true; }
+
+            if (string.IsNullOrWhiteSpace(Edicao)) { Console.WriteLine("→ Campo 'Edição' é obrigatório."); temErro = true; }
+
+            if (AnoPublicacao <= 0) { Console.WriteLine("→ Ano de Publicação inválido."); temErro = true; }
+
+            if (temErro) { Console.WriteLine("\nOperação Cancelada."); }
+
+            return !temErro;
+        }
+
+        public void Reservar()
+        {
+            StatusEmprestimo = "Reservada";
         }
 
         public void Emprestar()
         {
-          StatusEmprestimo = "Emprestada";
+            StatusEmprestimo = "Emprestada";
         }
 
         public void Devolver()
         {
-          StatusEmprestimo = "Disponível";
+            StatusEmprestimo = "Disponível";
         }
         public ConsoleColor ObterCorConsole(string cor)
         {
