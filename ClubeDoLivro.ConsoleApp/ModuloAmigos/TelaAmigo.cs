@@ -29,7 +29,12 @@ namespace ClubeDoLivro.ConsoleApp.ModuloAmigo
     */
     public class TelaAmigo
     {
-        RepositorioAmigo repositorioAmigo = new RepositorioAmigo();
+        public RepositorioAmigo repositorioAmigo;
+        public TelaAmigo(RepositorioAmigo repositorioAmigo)
+        {
+            this.repositorioAmigo = repositorioAmigo;
+        }
+
         public char ExibirTitulo(bool opcoes)
         {
             Console.Clear();

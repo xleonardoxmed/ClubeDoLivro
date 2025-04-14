@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ClubeDoLivro.ConsoleApp.ModuloRevistas;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,7 @@ namespace ClubeDoLivro.ConsoleApp.ModuloCaixas
         public string Cor;
         public int DiasEmprestimo;
         public int Id;
-        public List<string> Revistas = new();
+        public List<Revista> Revistas = new();
 
         public Caixa(string etiqueta, string cor, int diasEmprestimo)
         {
@@ -35,14 +36,14 @@ namespace ClubeDoLivro.ConsoleApp.ModuloCaixas
             return true;
         }
 
-        public void AdicionarRevista(string titulo)
+        public void AdicionarRevista(Revista revista)
         {
-            Revistas.Add(titulo);
+            Revistas.Add(revista);
         }
 
-        public void RemoverRevista(string titulo)
+        public void RemoverRevista(Revista revista)
         {
-            Revistas.Remove(titulo);
+            Revistas.Remove(revista);
         }
     }
 }

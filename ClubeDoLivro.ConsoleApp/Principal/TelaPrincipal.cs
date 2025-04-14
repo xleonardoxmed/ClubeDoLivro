@@ -6,9 +6,21 @@ namespace ClubeDoLivro.ConsoleApp.Principal
 {
     public class TelaPrincipal
     {
-        TelaAmigo telaAmigo = new TelaAmigo();
-        TelaCaixa telaCaixa = new TelaCaixa();
-        TelaRevista telaRevista = new TelaRevista();
+        public TelaAmigo telaAmigo;
+        public TelaCaixa telaCaixa;
+        public TelaRevista telaRevista;
+
+        RepositorioAmigo repositorioAmigo = new RepositorioAmigo();
+        RepositorioCaixa repositorioCaixa = new RepositorioCaixa();
+        RepositorioRevista repositorioRevista = new RepositorioRevista();
+
+        public TelaPrincipal()
+        {
+            telaAmigo = new TelaAmigo(repositorioAmigo);
+            telaCaixa = new TelaCaixa(repositorioCaixa);
+            telaRevista = new TelaRevista(repositorioRevista, repositorioCaixa, telaCaixa);
+        }
+
         public char ExibirTitulo(bool opcaoPrincipal)
         {
             Console.Clear();
@@ -101,8 +113,10 @@ namespace ClubeDoLivro.ConsoleApp.Principal
                     case '4': telaRevista.VisualizarRevistas(); break;
 
                     case '5': telaCaixa.VisualizarCaixas(); break;
+                   
+                    case '6': telaRevista.ColocarNaCaixa(); break;
 
-                    case '6': loop = false; break;
+                    case '7': loop = false; break;
 
                     default: break;
                 }

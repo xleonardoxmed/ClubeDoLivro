@@ -12,11 +12,13 @@ namespace ClubeDoLivro.ConsoleApp.ModuloRevistas
     {
         public RepositorioRevista repositorioRevista;
         public RepositorioCaixa repositorioCaixa;
-
-        public TelaRevista(RepositorioRevista repositorioRevista, RepositorioCaixa repositorioCaixa)
+        public TelaCaixa telaCaixa;
+       
+        public TelaRevista(RepositorioRevista repositorioRevista, RepositorioCaixa repositorioCaixa, TelaCaixa telaCaixa)
         {
             this.repositorioRevista = repositorioRevista;
             this.repositorioCaixa = repositorioCaixa;
+            this.telaCaixa = telaCaixa;
         }
 
         public char ExibirTitulo(bool opcoes)
@@ -35,7 +37,8 @@ namespace ClubeDoLivro.ConsoleApp.ModuloRevistas
                 Console.WriteLine("                              3 - Excluir Revistas");
                 Console.WriteLine("                              4 - Visualizar Revistas");
                 Console.WriteLine("                              5 - Visualizar Caixas");
-                Console.WriteLine("                              6 - Voltar ao Menu");
+                Console.WriteLine("                              6 - Colocar Revistas nas Caixas");
+                Console.WriteLine("                              7 - Voltar ao Menu");
                 Console.WriteLine("--------------------------------------------------------------------------------");
                 char opcaoEscolhida = Convert.ToChar(Console.ReadLine()![0]);
                 return opcaoEscolhida;
@@ -50,9 +53,6 @@ namespace ClubeDoLivro.ConsoleApp.ModuloRevistas
             Console.WriteLine("                             CADASTRO DE REVISTA");
             Console.WriteLine("--------------------------------------------------------------------------------");
 
-            //repositorioCaixa
-
-
             Console.WriteLine("\nInsira o TITULO (nome) da revista: ");
             string titulo = Convert.ToString(Console.ReadLine()!);
 
@@ -62,7 +62,7 @@ namespace ClubeDoLivro.ConsoleApp.ModuloRevistas
             Console.WriteLine($"\nInsira o ANO DE PUBLICAÇÃO (nome) da revista {titulo}: ");
             int anoPublicacao = Convert.ToInt32(Console.ReadLine()!);
 
-            Revista novaRevista = new Revista(titulo, edicao, anoPublicacao);
+            Revista novaRevista = new Revista(titulo, edicao, anoPublicacao, telaCaixa);
             repositorioRevista.Inserir(novaRevista);
 
             VisualizarRevistas();
@@ -91,7 +91,7 @@ namespace ClubeDoLivro.ConsoleApp.ModuloRevistas
             Console.WriteLine($"\nInsira o ANO DE PUBLICAÇÃO (nome) da revista {titulo}: ");
             int anoPublicacao = Convert.ToInt32(Console.ReadLine()!);
 
-            Revista novaRevista = new Revista(titulo, edicao, anoPublicacao);
+            Revista novaRevista = new Revista(titulo, edicao, anoPublicacao, telaCaixa);
             repositorioRevista.Editar(idSelecionado, novaRevista);
 
             bool conseguiuEditar = repositorioRevista.Editar(idSelecionado, novaRevista);
@@ -151,24 +151,70 @@ namespace ClubeDoLivro.ConsoleApp.ModuloRevistas
                 if (dadosRevista == null) continue;
                 temCadastros = true;
 
+                
+
                 string tituloFormatado = dadosRevista.Titulo.Length > 40 ? dadosRevista.Titulo.Substring(0, 37) + "..." : dadosRevista.Titulo;
 
-                Console.WriteLine("{0,-3} | {1,-40} | {2,-6} | {3,-6} | {4,-12} | {5}",
-                    dadosRevista.Id,
-                    tituloFormatado,
-                    dadosRevista.Edicao,
-                    dadosRevista.AnoPublicacao,
-                    dadosRevista.StatusEmprestimo,
-                    string.IsNullOrEmpty(dadosRevista.Caixa) ? "Nenhuma" : dadosRevista.Caixa
-                );
-                Console.WriteLine("--------------------------------------------------------------------------------");
-            }
+                if (dadosRevista.Caixa != null)
+                {
+                    // Exibindo os dados da revista
+                    Console.Write("{0,-3} | {1,-40} | {2,-6} | {3,-6} | {4,-12} | ",
+                        dadosRevista.Id,
+                        tituloFormatado,
+                        dadosRevista.Edicao,
+                        dadosRevista.AnoPublicacao,
+                        dadosRevista.StatusEmprestimo);
 
+                    // Aqui pintamos apenas a etiqueta da caixa
+                    Console.ForegroundColor = dadosRevista.ObterCorConsole(dadosRevista.Caixa.Cor);
+                    Console.Write(dadosRevista.Caixa.Etiqueta);  // Exibe a etiqueta da caixa com a cor
+                    Console.ResetColor();  // Resetando a cor após a etiqueta
+                }
+                else
+                {
+                    // Caso não haja caixa associada
+                    Console.WriteLine("{0,-3} | {1,-40} | {2,-6} | {3,-6} | {4,-12} | {5} ",
+                        dadosRevista.Id,
+                        tituloFormatado,
+                        dadosRevista.Edicao,
+                        dadosRevista.AnoPublicacao,
+                        dadosRevista.StatusEmprestimo,
+                        "Nenhuma"
+                    );
+                }
+            }
+       
             if (!temCadastros) { Console.WriteLine("\n                         Nenhuma revista cadastrada"); }
 
             Console.WriteLine("\n                   Aperte qualquer tecla para continuar");
             Console.ReadKey();
             Thread.Sleep(500);
+        }
+
+        public void ColocarNaCaixa()
+        {
+            VisualizarRevistas();
+
+            Console.WriteLine("\nDigite o ID da Revista que deseja ADICIONAR a uma Caixa");
+            int idSelecionado = Convert.ToInt32(Console.ReadLine()!);
+
+            Revista revista = repositorioRevista.SelecionarPorId(idSelecionado)!;
+
+            telaCaixa.VisualizarCaixas();
+
+            Console.WriteLine($"\nDigite o ID da Caixa que deseja ADICIONAR {revista.Titulo}");
+            int idCaixa = Convert.ToInt32(Console.ReadLine()!);
+
+            Caixa caixa = repositorioCaixa.SelecionarPorId(idCaixa)!;
+
+            caixa.AdicionarRevista(revista);
+            revista.Caixa = caixa;
+
+            Console.WriteLine("                       Revista incluída com sucesso!");
+            Console.WriteLine();
+
+            Thread.Sleep(1000);
+            VisualizarRevistas();
         }
     }
 }

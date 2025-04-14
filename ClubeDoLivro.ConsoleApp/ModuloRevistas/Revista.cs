@@ -14,22 +14,23 @@ namespace ClubeDoLivro.ConsoleApp.ModuloRevistas
         public string Edicao;
         public int AnoPublicacao;
         public string StatusEmprestimo;
-        public string Caixa;
+        public Caixa? Caixa;
         public int Id;
 
-        public Revista(string titulo, string edicao, int anoPublicacao)
+        private TelaCaixa telaCaixa;
+        public Revista(string titulo, string edicao, int anoPublicacao, TelaCaixa telaCaixa)
         {
             Titulo = titulo;
             Edicao = edicao;
             AnoPublicacao = anoPublicacao;
             StatusEmprestimo = "Disponível";
             Caixa = null!;
+            this.telaCaixa = telaCaixa;
         }
 
-        public void ColocarNaCaixa(Caixa caixa)
+        public void AtualizarCaixa(Caixa caixa, Revista revista)
         {
-            Caixa = caixa.Etiqueta;
-            StatusEmprestimo = "Emprestada";
+            Caixa = caixa;           
         }
 
         public void Validar()
@@ -39,12 +40,16 @@ namespace ClubeDoLivro.ConsoleApp.ModuloRevistas
 
         public void Emprestar()
         {
-
+          StatusEmprestimo = "Emprestada";
         }
 
         public void Devolver()
         {
 
+        }
+        public ConsoleColor ObterCorConsole(string cor)
+        {
+            return telaCaixa.ObterCorConsole(cor);
         }
     }
 }

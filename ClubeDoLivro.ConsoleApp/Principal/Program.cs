@@ -8,16 +8,8 @@ namespace ClubeDoLivro.ConsoleApp.Principal
     internal class Program
     {
         static void Main(string[] args)
-        {
-            RepositorioAmigo repositorioAmigo = new RepositorioAmigo();
-            RepositorioCaixa repositorioCaixa = new RepositorioCaixa();
-            RepositorioRevista repositorioRevista = new RepositorioRevista();
-
+        {          
             TelaPrincipal telaPrincipal = new TelaPrincipal();
-            TelaAmigo telaAmigo = new TelaAmigo();
-            TelaCaixa telaCaixa = new TelaCaixa();
-            TelaRevista telaRevista = new TelaRevista();
-
             bool programa = true;
 
             while (programa)

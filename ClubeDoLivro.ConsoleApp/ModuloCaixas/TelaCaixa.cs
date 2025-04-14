@@ -9,7 +9,12 @@ namespace ClubeDoLivro.ConsoleApp.ModuloCaixas
 {
     public class TelaCaixa
     {
-        RepositorioCaixa repositorioCaixa = new RepositorioCaixa();
+        public RepositorioCaixa repositorioCaixa;
+        public TelaCaixa(RepositorioCaixa repositorioCaixa)
+        {
+            this.repositorioCaixa = repositorioCaixa;
+        }
+
         public char ExibirTitulo(bool opcoes)
         {
             Console.Clear();
@@ -52,7 +57,7 @@ namespace ClubeDoLivro.ConsoleApp.ModuloCaixas
             repositorioCaixa.Inserir(novaCaixa);
 
             VisualizarCaixas();
-            Console.WriteLine("                       Amigo adicionado com sucesso!");
+            Console.WriteLine("                       Caixa adicionada com sucesso!");
             Thread.Sleep(1000);
         }
 
