@@ -42,6 +42,12 @@ namespace ClubeDoLivro.ConsoleApp.ModuloEmprestimos
         }
         public DateOnly CalcularDataDevolucao(DateOnly dataEmprestimo, Revista revista)
         {
+            if (revista.Caixa == null)
+            {
+                Console.WriteLine("Erro: A revista não possui uma caixa associada.");
+                return dataEmprestimo;
+            }
+
             return dataEmprestimo.AddDays(revista.Caixa.DiasEmprestimo);
         }
 

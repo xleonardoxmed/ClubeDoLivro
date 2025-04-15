@@ -36,14 +36,34 @@ namespace ClubeDoLivro.ConsoleApp.ModuloCaixas
             return true;
         }
 
+
+
         public void AdicionarRevista(Revista revista)
         {
-            Revistas.Add(revista);
+
+            if (revista.Caixa != null)
+            {
+                Console.WriteLine("A revista já está associada a uma caixa.");
+                return;
+            }
+
+            this.Revistas.Add(revista);
+            revista.Caixa = this;
         }
 
         public void RemoverRevista(Revista revista)
         {
-            Revistas.Remove(revista);
+            
+            if (this.Revistas.Contains(revista))
+            {
+                this.Revistas.Remove(revista);
+                revista.Caixa = null;
+            }
+            else
+            {
+                Console.WriteLine("Revista não encontrada nesta caixa.");
+            }
+
         }
     }
 }

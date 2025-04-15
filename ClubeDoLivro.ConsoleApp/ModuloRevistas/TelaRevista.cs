@@ -69,7 +69,7 @@ namespace ClubeDoLivro.ConsoleApp.ModuloRevistas
                 return;
             }
 
-            Console.WriteLine($"\nInsira o ANO DE PUBLICAÇÃO (nome) da revista {titulo}: ");
+            Console.WriteLine($"\nInsira o ANO DE PUBLICAÇÃO da revista {titulo}: ");
             string inputAno = Console.ReadLine()!;
 
             if (!int.TryParse(inputAno, out int anoPublicacao))
@@ -157,7 +157,7 @@ namespace ClubeDoLivro.ConsoleApp.ModuloRevistas
                 return;
             }
 
-            Console.WriteLine($"\nInsira o ANO DE PUBLICAÇÃO (nome) da revista {titulo}: ");
+            Console.WriteLine($"\nInsira o ANO DE PUBLICAÇÃO da revista {titulo}: ");
             string inputAno = Console.ReadLine()!;
 
             if (!int.TryParse(inputAno, out int anoPublicacao))
@@ -249,8 +249,8 @@ namespace ClubeDoLivro.ConsoleApp.ModuloRevistas
 
             bool temCadastros = false;
 
-            Console.WriteLine("{0,-3} | {1,-40} | {2,-6} | {3,-6} | {4,-12} | {5}",
-             "Id", "Título", "Edição", "Ano", "Status", "Caixa"
+            Console.WriteLine("{0,-3} | {1,-30} | {2,-6} | {3,-6} | {4,-13} | {5,-8}",
+                "Id", "Título", "Edição", "Ano", "Status", "Caixa"
             );
 
             for (int i = 0; i < revistasCadastradas.Length; i++)
@@ -260,41 +260,49 @@ namespace ClubeDoLivro.ConsoleApp.ModuloRevistas
                 if (dadosRevista == null) continue;
                 temCadastros = true;
 
-                string tituloFormatado = dadosRevista.Titulo.Length > 40 ? dadosRevista.Titulo.Substring(0, 37) + "..." : dadosRevista.Titulo;
+                string tituloFormatado = dadosRevista.Titulo.Length > 30
+                    ? dadosRevista.Titulo.Substring(0, 27) + "..."
+                    : dadosRevista.Titulo;
+
+                string statusFormatado = dadosRevista.StatusEmprestimo.Length > 13
+                    ? dadosRevista.StatusEmprestimo.Substring(0, 10) + "..."
+                    : dadosRevista.StatusEmprestimo;
 
                 if (dadosRevista.Caixa != null)
                 {
-                    Console.Write("{0,-3} | {1,-40} | {2,-6} | {3,-6} | {4,-12} | ",
+                    Console.Write("{0,-3} | {1,-30} | {2,-6} | {3,-6} | {4,-13} | ",
                         dadosRevista.Id,
                         tituloFormatado,
                         dadosRevista.Edicao,
                         dadosRevista.AnoPublicacao,
-                        dadosRevista.StatusEmprestimo
+                        statusFormatado
                     );
 
                     Console.ForegroundColor = dadosRevista.ObterCorConsole(dadosRevista.Caixa.Cor);
-                    Console.Write(dadosRevista.Caixa.Etiqueta); // Pinta a caixa 
+                    Console.WriteLine("{0,-8}", dadosRevista.Caixa.Etiqueta);
                     Console.ResetColor();
                 }
                 else
                 {
-                    Console.WriteLine("{0,-3} | {1,-40} | {2,-6} | {3,-6} | {4,-12} | {5} ",
+                    Console.WriteLine("{0,-3} | {1,-30} | {2,-6} | {3,-6} | {4,-13} | {5,-8}",
                         dadosRevista.Id,
                         tituloFormatado,
                         dadosRevista.Edicao,
                         dadosRevista.AnoPublicacao,
-                        dadosRevista.StatusEmprestimo,
+                        statusFormatado,
                         "Nenhuma"
                     );
                 }
             }
 
-            if (!temCadastros) { Console.WriteLine("\n                         Nenhuma revista cadastrada"); }
+            if (!temCadastros)
+                Console.WriteLine("\n                         Nenhuma revista cadastrada");
 
             Console.WriteLine("\n                   Aperte qualquer tecla para continuar");
             Console.ReadKey();
             Thread.Sleep(500);
         }
+
 
         public void ColocarNaCaixa()
         {
