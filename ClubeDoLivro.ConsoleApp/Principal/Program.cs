@@ -8,7 +8,7 @@ namespace ClubeDoLivro.ConsoleApp.Principal
     internal class Program
     {
         static void Main(string[] args)
-        {          
+        {
             TelaPrincipal telaPrincipal = new TelaPrincipal();
             bool programa = true;
 
@@ -24,11 +24,11 @@ namespace ClubeDoLivro.ConsoleApp.Principal
 
                     case '3': telaPrincipal.GerenciarRevistas(); break;
 
-                    case '4': telaPrincipal.VisualizarListaNegra(); break;
+                    case '4': telaPrincipal.GerenciarEmprestimos(); break;
 
-                    case '5': telaPrincipal.VisualizarEmprestimos(); break;
+                    case '5': telaPrincipal.VisualizarListaNegra(); break;
 
-                    case '6': programa = false ; break;
+                    case '6': programa = false; break;
 
                     default: break;
                 }

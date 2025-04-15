@@ -1,5 +1,6 @@
 ﻿using ClubeDoLivro.ConsoleApp.ModuloAmigo;
 using ClubeDoLivro.ConsoleApp.ModuloCaixas;
+using ClubeDoLivro.ConsoleApp.ModuloEmprestimos;
 using ClubeDoLivro.ConsoleApp.ModuloRevistas;
 
 namespace ClubeDoLivro.ConsoleApp.Principal
@@ -9,16 +10,19 @@ namespace ClubeDoLivro.ConsoleApp.Principal
         public TelaAmigo telaAmigo;
         public TelaCaixa telaCaixa;
         public TelaRevista telaRevista;
+        public TelaEmprestimo telaEmprestimo;
 
         RepositorioAmigo repositorioAmigo = new RepositorioAmigo();
         RepositorioCaixa repositorioCaixa = new RepositorioCaixa();
         RepositorioRevista repositorioRevista = new RepositorioRevista();
+        RepositorioEmprestimo repositorioEmprestimo = new RepositorioEmprestimo();
 
         public TelaPrincipal()
         {
             telaAmigo = new TelaAmigo(repositorioAmigo);
             telaCaixa = new TelaCaixa(repositorioCaixa);
             telaRevista = new TelaRevista(repositorioRevista, repositorioCaixa, telaCaixa);
+            telaEmprestimo = new TelaEmprestimo(repositorioAmigo, repositorioRevista, repositorioEmprestimo, telaAmigo, telaRevista);
         }
 
         public char ExibirTitulo(bool opcaoPrincipal)
@@ -35,8 +39,8 @@ namespace ClubeDoLivro.ConsoleApp.Principal
                 Console.WriteLine("                              1 - Gerenciar Amigos");
                 Console.WriteLine("                              2 - Gerenciar Caixas");
                 Console.WriteLine("                              3 - Gerenciar Revistas");
-                Console.WriteLine("                              4 - Visualizar Lista Negra");
-                Console.WriteLine("                              5 - Visualizar Empréstimos");
+                Console.WriteLine("                              4 - Gerenciar Empréstimos");
+                Console.WriteLine("                              5 - Visualizar Lista Negra");
                 Console.WriteLine("                              6 - Sair do Programa");
                 Console.WriteLine("--------------------------------------------------------------------------------");
                 char opcaoEscolhida = Convert.ToChar(Console.ReadLine()![0]);
@@ -125,9 +129,34 @@ namespace ClubeDoLivro.ConsoleApp.Principal
             }
         }
 
-        internal void VisualizarEmprestimos()
+        internal void GerenciarEmprestimos()
         {
-            throw new NotImplementedException();
+            bool loop = true;
+            while (loop)
+            {
+                char opcaoEscolhida = telaEmprestimo.ExibirTitulo(true);
+
+                switch (opcaoEscolhida)
+                {
+                    case '1': telaEmprestimo.InserirEmprestimo(); break;
+
+                    case '2': telaEmprestimo.EditarEmprestimo(); break;
+
+                    case '3': telaEmprestimo.ExcluirEmprestimo(); break;
+
+                    case '4': telaEmprestimo.VisualizarEmprestimos(); break;
+
+                    case '5': telaRevista.VisualizarRevistas(); break;
+
+                    case '6': telaAmigo.VisualizarAmigos(); break;
+
+                    case '7': telaEmprestimo.RegistrarDevolucao(); break;
+
+                    case '8': loop = false; break;
+
+                    default: break;
+                }
+            }
         }
 
         internal void VisualizarListaNegra()
