@@ -39,7 +39,7 @@ namespace ClubeDoLivro.ConsoleApp.ModuloAmigo
         public bool Excluir(int idSelecionado)
         {
             if (contadorAmigos == 0) return false;
-            
+
             int indice = Array.FindIndex(AmigosCadastrados, 0, contadorAmigos, a => a?.Id == idSelecionado);
             //percorre o array até encontrar o id, do início até o fim, checando se é vazio ou é o ID.
             //Guarda a posição ou -1 caso não ecnontre-a.
@@ -79,7 +79,5 @@ namespace ClubeDoLivro.ConsoleApp.ModuloAmigo
 
             return null;
         }
-
-
     }
 }

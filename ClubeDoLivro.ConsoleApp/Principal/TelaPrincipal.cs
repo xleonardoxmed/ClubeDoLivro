@@ -66,7 +66,7 @@ namespace ClubeDoLivro.ConsoleApp.Principal
 
                     case '4': telaAmigo.VisualizarAmigos(); break;
 
-                    case '5': telaAmigo.VisualizarEmprestimos(); break;
+                    case '5': telaAmigo.VisualizarEmprestimosAmigo(); break;
 
                     case '6': loop = false; break;
 

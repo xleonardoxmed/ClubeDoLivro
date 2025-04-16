@@ -81,7 +81,7 @@ namespace ClubeDoLivro.ConsoleApp.ModuloEmprestimos
                 Thread.Sleep(1000);
                 return;
             }
-      
+
             Console.WriteLine("\nInsira o ID DO AMIGO que ira pegar uma revista EMPRESTADA: ");
             string inputAmigoId = Console.ReadLine()!;
 
@@ -153,6 +153,8 @@ namespace ClubeDoLivro.ConsoleApp.ModuloEmprestimos
 
             repositorioEmprestimo.Inserir(novoEmprestimo);
             novoEmprestimo.Revista.StatusEmprestimo = "Emprestada";
+            amigoEmprestado.AdicionarEmprestimos(novoEmprestimo);
+
 
 
             VisualizarEmprestimos();
@@ -197,7 +199,7 @@ namespace ClubeDoLivro.ConsoleApp.ModuloEmprestimos
                 Thread.Sleep(2000);
                 return;
             }
-            
+
             Emprestimo emprestimoExistente = repositorioEmprestimo.SelecionarPorId(idSelecionado)!;
 
             if (emprestimoExistente == null)
@@ -269,9 +271,9 @@ namespace ClubeDoLivro.ConsoleApp.ModuloEmprestimos
 
             DateOnly dataEmprestimo = repositorioEmprestimo.SelecionarPorId(idSelecionado)!.DataEmprestimo;
 
-            emprestimoExistente.Revista.StatusEmprestimo = "Disponível";
+            emprestimoExistente.Amigo?.RemoverEmprestimos(emprestimoExistente);
 
-            revistaEmprestada.StatusEmprestimo = "Emprestada";
+            emprestimoExistente.Revista.StatusEmprestimo = "Disponível";
 
             Emprestimo emprestimoEditado = new Emprestimo(amigoEmprestado, revistaEmprestada, dataEmprestimo);
 
@@ -283,75 +285,129 @@ namespace ClubeDoLivro.ConsoleApp.ModuloEmprestimos
 
             bool conseguiuEditar = repositorioEmprestimo.Editar(idSelecionado, emprestimoEditado);
 
+            amigoEmprestado.AdicionarEmprestimos(emprestimoEditado);
+
             if (!conseguiuEditar)
             {
                 Console.WriteLine("                Ocorreu um erro durante a edição...");
                 return;
             }
 
+            emprestimoEditado.Revista.StatusEmprestimo = "Emprestada";
+
             Console.WriteLine();
-            Console.WriteLine("                       Emrpréstimo editado com sucesso!");
+            Console.WriteLine("                       Empréstimo editado com sucesso!");
             Thread.Sleep(1000);
             VisualizarEmprestimos();
         }
 
-        public void ExcluirEmprestimo()
+        public Emprestimo? ExcluirEmprestimo(bool devolucao = false)
         {
-            Console.Clear();
-            ExibirTitulo(false);
-            Console.WriteLine("                             EXCLUSÃO DE EMPRÉSTIMO");
-            Console.WriteLine("--------------------------------------------------------------------------------");
-
-            VisualizarEmprestimos();
-            bool temCadastros = false;
-
-            foreach (var emprestimo in repositorioEmprestimo.EmprestimosCadastrados)
+            if (!devolucao)
             {
-                if (emprestimo != null)
-                {
-                    temCadastros = true;
-                    break;
-                }
+                Console.Clear();
+                ExibirTitulo(false);
+                Console.WriteLine("                             EXCLUSÃO DE EMPRÉSTIMO");
+                Console.WriteLine("--------------------------------------------------------------------------------");
+                VisualizarEmprestimos();
             }
+
+            bool temCadastros = repositorioEmprestimo.EmprestimosCadastrados.Any(e => e != null);
 
             if (!temCadastros)
             {
-                Console.WriteLine("    \n                            Voltando ao menu");
-                Thread.Sleep(1000);
-                return;
+                if (!devolucao)
+                {
+                    Console.WriteLine("\n                            Voltando ao menu");
+                    Thread.Sleep(1000);
+                }
+                return null;
             }
 
-            Console.WriteLine("\nDigite o ID do Empréstimo que deseja EXCLUIR");
-            string inputId = Console.ReadLine()!;
+            if (!devolucao)
+                Console.WriteLine("\nDigite o ID do Empréstimo em questão: ");
 
+            string inputId = Console.ReadLine()!;
             if (!int.TryParse(inputId, out int idSelecionado))
             {
-                Console.WriteLine("\n Erro! ID inválido!");
-                Console.WriteLine("\nOperação Cancelada.");
-                Thread.Sleep(2000);
-                return;
+                if (!devolucao)
+                {
+                    Console.WriteLine("\n Erro! ID inválido!");
+                    Console.WriteLine("\nOperação Cancelada.");
+                    Thread.Sleep(2000);
+                }
+                return null;
             }
 
-            Emprestimo emprestimoParaExcluir = repositorioEmprestimo.SelecionarPorId(idSelecionado)!;
-            if (emprestimoParaExcluir != null)
+            Emprestimo emprestimoExcluido = repositorioEmprestimo.SelecionarPorId(idSelecionado)!;
+
+            if (emprestimoExcluido != null)
             {
-                emprestimoParaExcluir.Revista.StatusEmprestimo = "Disponível";
+                emprestimoExcluido.Revista.StatusEmprestimo = "Disponível";
+                emprestimoExcluido.Amigo?.RemoverEmprestimos(emprestimoExcluido);
             }
 
             bool conseguiuExcluir = repositorioEmprestimo.Excluir(idSelecionado);
 
-            if (!conseguiuExcluir) { Console.WriteLine("\n                 Empréstimo não encontrado ou não pôde ser excluídao"); }
-            else { Console.WriteLine("                       Empréstimo excluído com sucesso!"); }
+            if (!conseguiuExcluir)
+            {
+                if (!devolucao)
+                    Console.WriteLine("\n                 Empréstimo não encontrado!");
+                return null;
+            }
 
-            Console.WriteLine();
+            if (!devolucao)
+            {
+                Console.WriteLine("                       Empréstimo excluído com sucesso!");
+                Console.WriteLine();
+                Thread.Sleep(1000);
+                VisualizarEmprestimos();
+            }
 
-            Thread.Sleep(1000);
-            VisualizarEmprestimos();
+            return emprestimoExcluido;
         }
 
         public void RegistrarDevolucao()
         {
-            throw new NotImplementedException();
+            Console.Clear();
+            ExibirTitulo(false);
+            Console.WriteLine("                             REGISTRO DE DEVOLUÇÃO");
+            Console.WriteLine("--------------------------------------------------------------------------------");
+            VisualizarEmprestimos();
+
+            Console.WriteLine("\nDigite o ID do Empréstimo em questão: ");
+
+            string inputId = Console.ReadLine()!;
+            if (!int.TryParse(inputId, out int idSelecionado))
+            {
+                Console.WriteLine("\n                       Erro! ID inválido!");
+                Console.WriteLine("\n                      Operação Cancelada.");
+                Thread.Sleep(2000);
+                return;
+            }
+
+            Emprestimo emprestimoFechado = repositorioEmprestimo.SelecionarPorId(idSelecionado)!;
+
+            if (emprestimoFechado == null)
+            {
+                Console.WriteLine("                        Empréstimo não encontrado.");
+                Console.WriteLine("\n                         Operação Cancelada.");
+                Thread.Sleep(2000);
+                return;
+            }
+
+            // Aqui, NÃO vamos excluir o empréstimo do amigo, apenas marcar como fechado
+            emprestimoFechado.Revista.StatusEmprestimo = "Disponível";
+
+            // Se for necessário, altere o status do empréstimo para "Fechado"
+            DateOnly dataDevolucaoReal = DateOnly.FromDateTime(DateTime.Today);
+            emprestimoFechado.FecharEmprestimo(dataDevolucaoReal);
+
+            // Não removemos o empréstimo do amigo. Isso é importante para manter o histórico
+            // emprestimoFechado.Amigo?.RemoverEmprestimos(emprestimoFechado);
+
+            Console.WriteLine("                       Devolução registrada com sucesso!");
+            Thread.Sleep(1500);
         }
 
         public void VisualizarEmprestimos()
@@ -366,9 +422,6 @@ namespace ClubeDoLivro.ConsoleApp.ModuloEmprestimos
 
             bool temCadastros = false;
 
-            Revista dadosRevista;
-            Emprestimo dadosEmprestimo;
-
             int larguraId = 3;
             int larguraAmigo = 18;
             int larguraRevista = 20;
@@ -378,13 +431,15 @@ namespace ClubeDoLivro.ConsoleApp.ModuloEmprestimos
             Console.WriteLine("{0,-" + larguraId + "} | {1,-" + larguraAmigo + "} | {2,-" + larguraRevista + "} | {3,-" + larguraDataEmprestimo + "} | {4,-" + larguraPrazoDeEntrega + "}",
                 "Id", "Amigo", "Revista", "Data Empréstimo", "Prazo de Entrega");
 
-            for (int i = 0; i < emprestimosCadastrados.Length; i++)
+            foreach (Emprestimo dadosEmprestimo in emprestimosCadastrados)
             {
-                dadosEmprestimo = emprestimosCadastrados[i];
-                if (dadosEmprestimo == null) continue;
+                // Aqui pulamos os empréstimos fechados
+                if (dadosEmprestimo == null || dadosEmprestimo.StatusEmprestimo == "Fechado")
+                    continue;
+
                 temCadastros = true;
 
-                dadosRevista = revistasCadastradas.FirstOrDefault(r => r.Id == dadosEmprestimo.Revista.Id)!;
+                Revista dadosRevista = revistasCadastradas.FirstOrDefault(r => r.Id == dadosEmprestimo.Revista.Id)!;
                 if (dadosRevista == null)
                 {
                     Console.WriteLine("\nRevista não encontrada para o empréstimo!");
@@ -409,8 +464,7 @@ namespace ClubeDoLivro.ConsoleApp.ModuloEmprestimos
 
                 Console.WriteLine(" | {0,-" + larguraDataEmprestimo + "} | {1,-" + larguraPrazoDeEntrega + "}",
                     dadosEmprestimo.DataEmprestimo.ToString("dd/MM/yyyy"),
-                    dadosEmprestimo.CalcularDataDevolucao(dadosEmprestimo.DataEmprestimo, dadosRevista).ToString("dd/MM/yyyy")
-                );
+                    dadosEmprestimo.CalcularDataDevolucao(dadosEmprestimo.DataEmprestimo, dadosRevista).ToString("dd/MM/yyyy"));
             }
 
             if (!temCadastros)

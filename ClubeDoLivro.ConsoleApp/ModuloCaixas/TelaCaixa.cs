@@ -133,7 +133,7 @@ namespace ClubeDoLivro.ConsoleApp.ModuloCaixas
             bool temCadastros = false;
 
             Console.WriteLine("{0,-3} | {1,-30} | {2,-30} | {3,-15}",
-               "Id", "Etiqueta:", "Cor", "Prazo de Devolução"
+               "Id", "Etiqueta:", "Cor", "Prazo de Devolução (Dias)"
            );
 
             for (int i = 0; i < caixasCadastradas.Length; i++)

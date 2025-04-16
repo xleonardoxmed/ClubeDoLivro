@@ -1,8 +1,10 @@
-﻿using System;
+﻿using ClubeDoLivro.ConsoleApp.ModuloEmprestimos;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace ClubeDoLivro.ConsoleApp.ModuloAmigo
@@ -66,22 +68,32 @@ namespace ClubeDoLivro.ConsoleApp.ModuloAmigo
             Console.WriteLine("                             CADASTRO DE AMIGO");
             Console.WriteLine("--------------------------------------------------------------------------------");
 
-            Console.WriteLine("\nInsira o NOME COMPLETO do amigo: ");
-            string nomeCompleto = Convert.ToString(Console.ReadLine()!);
+            string nomeCompleto, nomeResponsavel, telefoneFormatado;
+            List<Emprestimo> listaEmprestimosDoAmigo = new List<Emprestimo>();
 
-            Console.WriteLine($"\nInsira o NOME DO RESPONSÁVEL de {nomeCompleto}: ");
-            string nomeResponsavel = Convert.ToString(Console.ReadLine()!);
+            bool dadosValidos = ObterDadosAmigo(out nomeCompleto, out nomeResponsavel, out telefoneFormatado);
 
-            Console.WriteLine($"\nInsira o NÚMERO DE TELEFONE de {nomeCompleto}");
-            string telefone = Console.ReadLine()!;
+            if (!dadosValidos)
+                return;
 
-            Amigo novoAmigo = new Amigo(nomeCompleto, nomeResponsavel, telefone);
+            Amigo novoAmigo = new Amigo(nomeCompleto, nomeResponsavel, telefoneFormatado, repositorioAmigo, listaEmprestimosDoAmigo);
+
+            bool amigoValido = novoAmigo.Validar(novoAmigo, false);
+
+            if (!amigoValido)
+            {
+                Console.WriteLine("                        Operação cancelada");
+                Thread.Sleep(2000);
+                return;
+            }
+
             repositorioAmigo.Inserir(novoAmigo);
-           
+
             VisualizarAmigos();
             Console.WriteLine("                       Amigo adicionado com sucesso!");
             Thread.Sleep(1000);
         }
+
 
 
         public void EditarAmigo()
@@ -93,19 +105,36 @@ namespace ClubeDoLivro.ConsoleApp.ModuloAmigo
 
             VisualizarAmigos();
 
+            string nomeCompleto, nomeResponsavel, telefoneFormatado;
+            List<Emprestimo> listaEmprestimosDoAmigo = new List<Emprestimo>();
+
             Console.WriteLine("\nDigite o ID do Amigo que deseja EDITAR");
-            int idSelecionado = Convert.ToInt32(Console.ReadLine()!);
+            string inputId = Console.ReadLine()!;
 
-            Console.WriteLine("\nInsira o NOME COMPLETO do amigo: ");
-            string nomeCompleto = Convert.ToString(Console.ReadLine()!);
 
-            Console.WriteLine($"\nInsira o NOME DO RESPONSÁVEL de {nomeCompleto}: ");
-            string nomeResponsavel = Convert.ToString(Console.ReadLine()!);
+            if (!int.TryParse(inputId, out int idSelecionado))
+            {
+                Console.WriteLine("\n Erro! ID inválido!");
+                Console.WriteLine("\nOperação Cancelada.");
+                Thread.Sleep(2000);
+                return;
+            }
 
-            Console.WriteLine($"\nInsira o NÚMERO DE TELEFONE de {nomeCompleto}");
-            string telefone = Console.ReadLine()!;
+            bool dadosValidos = ObterDadosAmigo(out nomeCompleto, out nomeResponsavel, out telefoneFormatado);
 
-            Amigo amigoEditado = new Amigo(nomeCompleto, nomeResponsavel, telefone);
+            if (!dadosValidos)
+                return;
+
+            Amigo amigoEditado = new Amigo(nomeCompleto, nomeResponsavel, telefoneFormatado, repositorioAmigo, listaEmprestimosDoAmigo);
+
+            bool amigoValido = amigoEditado.Validar(amigoEditado, true, idSelecionado);
+
+            if (!amigoValido)
+            {
+                Console.WriteLine("                        Operação cancelada");
+                Thread.Sleep(2000);
+                return;
+            }
 
             bool conseguiuEditar = repositorioAmigo.Editar(idSelecionado, amigoEditado);
 
@@ -180,11 +209,85 @@ namespace ClubeDoLivro.ConsoleApp.ModuloAmigo
             Thread.Sleep(500);
         }
 
-        public void VisualizarEmprestimos()
+        public void VisualizarEmprestimosAmigo()
         {
-            throw new NotImplementedException();
+            Console.Clear();
+            ExibirTitulo(false);
+            Console.WriteLine("                             VISUALIZAR EMPRÉSTIMOS DE AMIGO");
+            Console.WriteLine("--------------------------------------------------------------------------------");
+
+            VisualizarAmigos();  
+
+            Console.WriteLine("\nDigite o ID do amigo que deseja visualizar os empréstimos");
+            int idSelecionado;
+
+            if (!int.TryParse(Console.ReadLine(), out idSelecionado))
+            {
+                Console.WriteLine("ID inválido! Operação cancelada.");
+                Thread.Sleep(2000);
+                return;
+            }
+
+            Amigo? amigoSelecionado = repositorioAmigo.SelecionarPorId(idSelecionado);
+
+            if (amigoSelecionado == null)
+            {
+                Console.WriteLine("Amigo não encontrado.");
+                Thread.Sleep(2000);
+                return;
+            }
+
+            string emprestimos = amigoSelecionado.ObterEmprestimos();
+            if (string.IsNullOrEmpty(emprestimos))
+            {
+                Console.WriteLine("Este amigo não tem empréstimos registrados.");
+            }
+            else
+            {
+                Console.WriteLine(emprestimos);
+            }
+
+            Console.WriteLine("\nAperte qualquer tecla para continuar...");
+            Console.ReadKey();
         }
 
+        public bool ObterDadosAmigo(out string nomeCompleto, out string nomeResponsavel, out string telefoneFormatado)
+        {
+            nomeCompleto = nomeResponsavel = telefoneFormatado = "";
+
+            Console.WriteLine("\nInsira o NOME COMPLETO do amigo: ");
+            nomeCompleto = Console.ReadLine()!.ToUpper();
+            if (nomeCompleto.Length < 3 || nomeCompleto.Length > 100)
+            {
+                Console.WriteLine("                       Erro! Precisa ter no mínimo TRÊS LETRAS");
+                Console.WriteLine("                       Operação cancelada");
+                Thread.Sleep(2000);
+                return false;
+            }
+
+            Console.WriteLine($"\nInsira o NOME DO RESPONSÁVEL de {nomeCompleto}: ");
+            nomeResponsavel = Console.ReadLine()!.ToUpper();
+            if (nomeResponsavel.Length < 3 || nomeResponsavel.Length > 100)
+            {
+                Console.WriteLine("                       Erro! Precisa ter no mínimo TRÊS LETRAS");
+                Console.WriteLine("                       Operação cancelada");
+                Thread.Sleep(2000);
+                return false;
+            }
+
+            Console.WriteLine($"\nInsira o NÚMERO DE TELEFONE de {nomeCompleto}");
+            string telefone = Console.ReadLine()!;
+            telefoneFormatado = new string(telefone.Where(char.IsDigit).ToArray());
+            if (telefoneFormatado.Length < 10 || telefoneFormatado.Length > 11)
+            {
+                Console.WriteLine("                        Erro! O telefone deve conter 10 ou 11 dígitos numéricos.");
+                Console.WriteLine("                        Operação cancelada");
+                Thread.Sleep(2000);
+                return false;
+            }
+
+            return true;
+        }
 
     }
 }

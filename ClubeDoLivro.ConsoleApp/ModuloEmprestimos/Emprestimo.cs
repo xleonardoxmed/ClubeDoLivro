@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,6 +18,7 @@ namespace ClubeDoLivro.ConsoleApp.ModuloEmprestimos
         public DateOnly DataEmprestimo;
         public string Situação;
         public int Id;
+        public string StatusEmprestimo;
 
 
         public Emprestimo(Amigo amigo, Revista revista, DateOnly dataEmprestimo)
@@ -26,6 +28,7 @@ namespace ClubeDoLivro.ConsoleApp.ModuloEmprestimos
             DataEmprestimo = dataEmprestimo;
             DataDevolucao = CalcularDataDevolucao(DataEmprestimo, Revista);
             Situação = "Emprestada";
+            StatusEmprestimo = "Em Aberto";
         }
 
         public bool Validar()
@@ -50,11 +53,10 @@ namespace ClubeDoLivro.ConsoleApp.ModuloEmprestimos
 
             return dataEmprestimo.AddDays(revista.Caixa.DiasEmprestimo);
         }
-
-        public void RegistrarDevolucao()
+        public void FecharEmprestimo(DateOnly dataDevolucaoReal)
         {
-          
+            DataDevolucao = dataDevolucaoReal;
+            StatusEmprestimo = "Fechado";
         }
-
     }
 }
