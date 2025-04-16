@@ -1,4 +1,4 @@
-# ?? Clube do Livro
+#  Clube do Livro
 ![](https://i.imgur.com/cHEh7MP.gif)
 Sistema de gerenciamento de empréstimos de revistas entre amigos, desenvolvido como aplicação console em C#.
 
@@ -13,7 +13,7 @@ Exibição de "lista negra" com amigos que têm multas pendentes
 
 Validação de dados para evitar cadastros duplicados ou inconsistentes
 
-# ?? Estrutura do Projeto
+# Estrutura do Projeto
 ```
 ClubeDoLivro.ConsoleApp/
 ?
@@ -26,7 +26,7 @@ ClubeDoLivro.ConsoleApp/
 ??? Program.cs           -> Ponto de entrada da aplicação
 ```
 
-# ?? Lógica de Negócio
+#  Lógica de Negócio
 - Cada revista pertence a uma caixa.
 
 - Um amigo pode ter vários empréstimos registrados.
@@ -39,14 +39,14 @@ ClubeDoLivro.ConsoleApp/
 
 - Revistas podem ser reemprestadas após a devolução.
 
-## ?? Validações
+##  Validações
 - Nome e telefone de amigos devem ser únicos.
 
 - Campos obrigatórios não podem estar em branco.
 
 - Só é possível emprestar revistas que estejam disponíveis.
 
-## ??? Tecnologias
+## Tecnologias
 - Linguagem: C#
 
 - Tipo: Aplicação Console
