@@ -78,7 +78,7 @@ cd ClubeDoLivro.ConsoleApp
 dotnet run
 ````
 
-## ?? Observações Finais
+##  Observações Finais
 O sistema usa listas internas para simular um "banco de dados".
 
 Ainda não possui persistência de dados — ao encerrar o programa, os dados são perdidos.
