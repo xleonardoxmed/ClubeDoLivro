@@ -9,26 +9,6 @@ using System.Threading.Tasks;
 
 namespace ClubeDoLivro.ConsoleApp.ModuloAmigo
 {
-    /* Módulo de Amigos
-    Requisitos Funcionais
-
-    ● O sistema deve permitir visualizar os empréstimos do amigo. 
-     ● Não permitir excluir um amigo caso tenha empréstimos vinculados
-                                 => Fazer depois do Modulo de Emprestimos
-
-    Regras de Negócio:
-
-    ● Campos obrigatórios:
-    VALIDAÇÕES 
-
-        ○ Nome(mínimo 3 caracteres, máximo 100)
-        ○ Nome do responsável(mínimo 3 caracteres, máximo 100)
-        ○ Telefone(formato validado: (XX) XXXX-XXXX ou (XX) XXXXX-XXXX)
-
-    ● Não pode haver amigos com o mesmo NOME e TELEFONE.
-
-   
-    */
     public class TelaAmigo
     {
         public RepositorioAmigo repositorioAmigo;
@@ -216,7 +196,7 @@ namespace ClubeDoLivro.ConsoleApp.ModuloAmigo
             Console.WriteLine("                             VISUALIZAR EMPRÉSTIMOS DE AMIGO");
             Console.WriteLine("--------------------------------------------------------------------------------");
 
-            VisualizarAmigos();  
+            VisualizarAmigos();
 
             Console.WriteLine("\nDigite o ID do amigo que deseja visualizar os empréstimos");
             int idSelecionado;
@@ -237,15 +217,7 @@ namespace ClubeDoLivro.ConsoleApp.ModuloAmigo
                 return;
             }
 
-            string emprestimos = amigoSelecionado.ObterEmprestimos();
-            if (string.IsNullOrEmpty(emprestimos))
-            {
-                Console.WriteLine("Este amigo não tem empréstimos registrados.");
-            }
-            else
-            {
-                Console.WriteLine(emprestimos);
-            }
+            amigoSelecionado.ObterEmprestimos();
 
             Console.WriteLine("\nAperte qualquer tecla para continuar...");
             Console.ReadKey();

@@ -93,7 +93,6 @@ namespace ClubeDoLivro.ConsoleApp.ModuloEmprestimos
                 return;
             }
 
-
             Amigo amigoEmprestado = repositorioAmigo.SelecionarPorId(idAmigoSelecionado)!;
 
             if (amigoEmprestado == null)
@@ -140,10 +139,21 @@ namespace ClubeDoLivro.ConsoleApp.ModuloEmprestimos
                 return;
             }
 
+            
+            bool podeEmprestar = revistaEmprestada.PodeEmprestar();  
+
+            if (!podeEmprestar)
+            {
+                Console.WriteLine("\n                       Erro: Esta revista já está emprestada.");
+                Thread.Sleep(2000);
+                return;  
+            }
+
             DateOnly dataEmprestimo = DateOnly.FromDateTime(DateTime.Today);
 
             Emprestimo novoEmprestimo = new Emprestimo(amigoEmprestado, revistaEmprestada, dataEmprestimo);
 
+            novoEmprestimo.StatusEmprestimo = "Em Aberto";
 
             if (!novoEmprestimo.Validar())
             {
@@ -153,14 +163,14 @@ namespace ClubeDoLivro.ConsoleApp.ModuloEmprestimos
 
             repositorioEmprestimo.Inserir(novoEmprestimo);
             novoEmprestimo.Revista.StatusEmprestimo = "Emprestada";
+           
             amigoEmprestado.AdicionarEmprestimos(novoEmprestimo);
-
-
 
             VisualizarEmprestimos();
             Console.WriteLine("                       Empréstimo registrado com sucesso!");
             Thread.Sleep(1000);
         }
+
 
         public void EditarEmprestimo()
         {
@@ -396,15 +406,12 @@ namespace ClubeDoLivro.ConsoleApp.ModuloEmprestimos
                 return;
             }
 
-            // Aqui, NÃO vamos excluir o empréstimo do amigo, apenas marcar como fechado
+            emprestimoFechado.StatusEmprestimo = "Fechado";
             emprestimoFechado.Revista.StatusEmprestimo = "Disponível";
 
-            // Se for necessário, altere o status do empréstimo para "Fechado"
+
             DateOnly dataDevolucaoReal = DateOnly.FromDateTime(DateTime.Today);
             emprestimoFechado.FecharEmprestimo(dataDevolucaoReal);
-
-            // Não removemos o empréstimo do amigo. Isso é importante para manter o histórico
-            // emprestimoFechado.Amigo?.RemoverEmprestimos(emprestimoFechado);
 
             Console.WriteLine("                       Devolução registrada com sucesso!");
             Thread.Sleep(1500);
@@ -433,7 +440,6 @@ namespace ClubeDoLivro.ConsoleApp.ModuloEmprestimos
 
             foreach (Emprestimo dadosEmprestimo in emprestimosCadastrados)
             {
-                // Aqui pulamos os empréstimos fechados
                 if (dadosEmprestimo == null || dadosEmprestimo.StatusEmprestimo == "Fechado")
                     continue;
 

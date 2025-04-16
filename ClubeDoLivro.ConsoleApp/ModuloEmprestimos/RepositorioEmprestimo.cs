@@ -26,9 +26,7 @@ namespace ClubeDoLivro.ConsoleApp.ModuloEmprestimos
             if (contadorEmprestimos == 0) return false;
 
             int indice = Array.FindIndex(EmprestimosCadastrados, 0, contadorEmprestimos, a => a?.Id == idSelecionado);
-            //percorre o array até encontrar o id, do início até o fim, checando se é vazio ou é o ID.
-            //Guarda a posição ou -1 caso não ecnontre-a.
-
+           
             if (indice == -1)
             {
                 Console.WriteLine("                    Empréstimo não encontrado...");
@@ -55,9 +53,7 @@ namespace ClubeDoLivro.ConsoleApp.ModuloEmprestimos
             if (contadorEmprestimos == 0) return false;
 
             int indice = Array.FindIndex(EmprestimosCadastrados, 0, contadorEmprestimos, a => a?.Id == idSelecionado);
-            //percorre o array até encontrar o id, do início até o fim, checando se é vazio ou é o ID.
-            //Guarda a posição ou -1 caso não ecnontre-a.
-
+          
             if (indice == -1)
             {
                 Console.WriteLine("                    Empréstimo não encontrado...");
@@ -67,14 +63,11 @@ namespace ClubeDoLivro.ConsoleApp.ModuloEmprestimos
 
             for (int i = indice; i < contadorEmprestimos - 1; i++)
                 EmprestimosCadastrados[i] = EmprestimosCadastrados[i + 1];
-            //puxa todos para trás, preenchendo os buracos
-
+        
             EmprestimosCadastrados[--contadorEmprestimos] = null!;
-            //remove o último item duplicado
 
             for (int i = 0; i < contadorEmprestimos; i++)
                 EmprestimosCadastrados[i].Id = i + 1;
-            //atualiza os IDs
             return true;
         }
         public Emprestimo[] SelecionarTodas()

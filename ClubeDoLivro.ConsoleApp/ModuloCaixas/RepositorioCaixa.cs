@@ -41,9 +41,7 @@ namespace ClubeDoLivro.ConsoleApp.ModuloCaixas
         {
             if (contadorCaixas == 0) return false;
 
-            int indice = Array.FindIndex(CaixasCadastradas, 0, contadorCaixas, a => a?.Id == idSelecionado);
-            //percorre o array até encontrar o id, do início até o fim, checando se é vazio ou é o ID.
-            //Guarda a posição ou -1 caso não ecnontre-a.
+            int indice = Array.FindIndex(CaixasCadastradas, 0, contadorCaixas, a => a?.Id == idSelecionado);.
 
             if (indice == -1)
             {
@@ -54,14 +52,12 @@ namespace ClubeDoLivro.ConsoleApp.ModuloCaixas
 
             for (int i = indice; i < contadorCaixas - 1; i++)
                 CaixasCadastradas[i] = CaixasCadastradas[i + 1];
-            //puxa todos para trás, preenchendo os buracos
 
             CaixasCadastradas[--contadorCaixas] = null!;
-            //remove o último item duplicado
 
             for (int i = 0; i < contadorCaixas; i++)
                 CaixasCadastradas[i].Id = i + 1;
-            //atualiza os IDs
+
             return true;
         }
         public Caixa[] SelecionarTodas()

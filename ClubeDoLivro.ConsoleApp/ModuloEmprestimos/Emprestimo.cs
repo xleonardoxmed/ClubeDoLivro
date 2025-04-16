@@ -14,19 +14,18 @@ namespace ClubeDoLivro.ConsoleApp.ModuloEmprestimos
     {
         public Amigo Amigo;
         public Revista Revista;
-        public DateOnly DataDevolucao;
+        public DateOnly? DataDevolucao;
         public DateOnly DataEmprestimo;
         public string Situação;
         public int Id;
         public string StatusEmprestimo;
-
 
         public Emprestimo(Amigo amigo, Revista revista, DateOnly dataEmprestimo)
         {
             Amigo = amigo;
             Revista = revista;
             DataEmprestimo = dataEmprestimo;
-            DataDevolucao = CalcularDataDevolucao(DataEmprestimo, Revista);
+            DataDevolucao = CalcularDataDevolucao(dataEmprestimo, revista);
             Situação = "Emprestada";
             StatusEmprestimo = "Em Aberto";
         }
@@ -35,14 +34,24 @@ namespace ClubeDoLivro.ConsoleApp.ModuloEmprestimos
         {
             bool temErro = false;
 
-            if (Amigo == null) { Console.WriteLine("→ Campo 'Amigo' obrigatório"); temErro = true; }
+            if (Amigo == null)
+            {
+                Console.WriteLine("→ Campo 'Amigo' obrigatório");
+                temErro = true;
+            }
 
-            if (Revista == null) { Console.WriteLine("→ Campo 'Revista' obrigatório"); temErro = true; }
+            if (Revista == null)
+            {
+                Console.WriteLine("→ Campo 'Revista' obrigatório");
+                temErro = true;
+            }
 
-            if (temErro) { Console.WriteLine("\nOperação Cancelada."); }
-                
+            if (temErro)
+                Console.WriteLine("\nOperação Cancelada.");
+
             return !temErro;
         }
+
         public DateOnly CalcularDataDevolucao(DateOnly dataEmprestimo, Revista revista)
         {
             if (revista.Caixa == null)
@@ -53,10 +62,29 @@ namespace ClubeDoLivro.ConsoleApp.ModuloEmprestimos
 
             return dataEmprestimo.AddDays(revista.Caixa.DiasEmprestimo);
         }
+
         public void FecharEmprestimo(DateOnly dataDevolucaoReal)
         {
             DataDevolucao = dataDevolucaoReal;
             StatusEmprestimo = "Fechado";
         }
+
+        public bool EstaAberto()
+        {
+            return StatusEmprestimo == "Em Aberto";
+        }
+        public bool EmprestarRevista()
+        {
+            if (Revista.StatusEmprestimo == "Emprestada")
+            {
+                Console.WriteLine("→ A revista já está emprestada e não pode ser emprestada novamente.");
+                return false;
+            }
+
+            bool podeEmprestar = Revista.PodeEmprestar();
+            StatusEmprestimo = "Em Aberto";
+            return true;
+        }
     }
 }
+

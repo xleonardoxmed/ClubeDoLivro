@@ -159,9 +159,51 @@ namespace ClubeDoLivro.ConsoleApp.Principal
             }
         }
 
-        internal void VisualizarListaNegra()
+        public void VisualizarListaNegra()
         {
-            throw new NotImplementedException();
+            Console.Clear();
+            Console.WriteLine("                          AMIGOS COM MULTA PENDENTE");
+            Console.WriteLine("--------------------------------------------------------------------------------");
+            Console.WriteLine("{0,-20} | {1,-20} | {2,-10}", "Nome", "Telefone", "Multa (R$)");
+
+            bool encontrouMultados = false;
+
+            foreach (var amigo in repositorioAmigo.AmigosCadastrados)
+            {
+                if (amigo == null) continue;
+
+                double multaTotal = 0;
+                DateTime dataAtual = DateTime.Today;
+
+                foreach (var emprestimo in amigo.amigoEmprestimos)
+                {
+                    if (emprestimo.StatusEmprestimo == "Em Aberto" && emprestimo.DataDevolucao.HasValue)
+                    {
+                        DateTime dataDevolucaoPrevista = emprestimo.DataDevolucao.Value.ToDateTime(new TimeOnly(0, 0));
+
+                        if (dataDevolucaoPrevista < dataAtual)
+                        {
+                            TimeSpan atraso = dataAtual - dataDevolucaoPrevista;
+                            multaTotal += atraso.Days * 2;
+                        }
+                    }
+                }
+
+                if (multaTotal > 0)
+                {
+                    encontrouMultados = true;
+                    Console.WriteLine("{0,-20} | {1,-20} | {2,-10:F2}", amigo.NomeCompleto, amigo.Telefone, multaTotal);
+                }
+            }
+
+            if (!encontrouMultados)
+            {
+                Console.WriteLine("Nenhum amigo com multa pendente.");
+            }
+
+            Console.WriteLine("--------------------------------------------------------------------------------");
+            Console.WriteLine("Pressione qualquer tecla para continuar...");
+            Console.ReadKey();
         }
     }
 }

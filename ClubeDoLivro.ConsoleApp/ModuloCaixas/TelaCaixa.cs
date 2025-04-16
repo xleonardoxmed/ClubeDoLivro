@@ -69,7 +69,7 @@ namespace ClubeDoLivro.ConsoleApp.ModuloCaixas
             Console.WriteLine("--------------------------------------------------------------------------------");
 
             VisualizarCaixas();
-
+            if (repositorioCaixa.contadorCaixas == 0) { return; }
             Console.WriteLine("\nDigite o ID da Caixa que deseja EDITAR");
             int idSelecionado = Convert.ToInt32(Console.ReadLine()!);
 
@@ -179,7 +179,7 @@ namespace ClubeDoLivro.ConsoleApp.ModuloCaixas
 
         public string SolicitarCorValida(string etiqueta)
         {
-            string[] coresValidas = { "vermelho", "verde", "azul", "amarelo", "ciano", "branco", "cinza","magenta" };
+            string[] coresValidas = { "vermelho", "verde", "azul", "amarelo", "ciano", "branco", "cinza", "magenta" };
 
             string cor;
 

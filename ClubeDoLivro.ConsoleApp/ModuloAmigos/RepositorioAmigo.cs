@@ -41,9 +41,7 @@ namespace ClubeDoLivro.ConsoleApp.ModuloAmigo
             if (contadorAmigos == 0) return false;
 
             int indice = Array.FindIndex(AmigosCadastrados, 0, contadorAmigos, a => a?.Id == idSelecionado);
-            //percorre o array até encontrar o id, do início até o fim, checando se é vazio ou é o ID.
-            //Guarda a posição ou -1 caso não ecnontre-a.
-
+           
             if (indice == -1)
             {
                 Console.WriteLine("                    Amigo não encontrado...");
@@ -53,14 +51,12 @@ namespace ClubeDoLivro.ConsoleApp.ModuloAmigo
 
             for (int i = indice; i < contadorAmigos - 1; i++)
                 AmigosCadastrados[i] = AmigosCadastrados[i + 1];
-            //puxa todos para trás, preenchendo os buracos
-
+           
             AmigosCadastrados[--contadorAmigos] = null!;
-            //remove o último item duplicado
-
+          
             for (int i = 0; i < contadorAmigos; i++)
                 AmigosCadastrados[i].Id = i + 1;
-            //atualiza os IDs
+           
             return true;
         }
 

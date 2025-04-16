@@ -53,9 +53,13 @@ namespace ClubeDoLivro.ConsoleApp.ModuloRevistas
             StatusEmprestimo = "Reservada";
         }
 
-        public void Emprestar()
+        public bool PodeEmprestar()
         {
-            StatusEmprestimo = "Emprestada";
+            if (StatusEmprestimo != "Disponível")
+            {
+                return false; 
+            }
+            return true;
         }
 
         public void Devolver()
